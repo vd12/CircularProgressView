@@ -1,1 +1,1 @@
-![Alt text](./iOS\ Simulator\ Screen\ shot.png “Screenshot”)
+![Alt text](./iOS\ Simulator\ Screen\ shot.jpg “Screenshot”)
