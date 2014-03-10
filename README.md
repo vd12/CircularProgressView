@@ -1,1 +1,1 @@
-![Alt text](./Screenshot.jpg “Screenshot”)
+![Screenshot](https://github.com/vd12/CircularProgressView/Screenshot.jpg “Screenshot”)
