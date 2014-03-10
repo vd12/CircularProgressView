@@ -1,1 +1,2 @@
-![Screenshot](https://github.com/vd12/CircularProgressView/Screenshot.jpg)
+## CircularProgressView
+![Screenshot](https://github.com/vd12/CircularProgressView/raw/master/Screenshot.jpg)
