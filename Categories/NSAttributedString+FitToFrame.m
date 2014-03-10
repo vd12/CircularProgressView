@@ -20,12 +20,11 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
 
 @implementation NSAttributedString (FitToFrame)
 
--(NSAttributedString *) fitToFrame:(CGRect)frame newString:(NSString *)newStr newTextColor:(UIColor*)textColor returnNewBounds:(CGRect*)bounds
+-(NSAttributedString *) fitToFrame:(CGRect)frame newString:(NSString *)newStr newColor:(UIColor*)color prevFontSize:(CGFloat*)prevFontSize returnNewBounds:(CGRect*)bounds
 {
     NSMutableAttributedString *outStr;
     if (newStr) {
         NSDictionary *dict = [self attributesAtIndex:0 effectiveRange:NULL];
-        //NSLog(@"%@", dict);
         outStr = [[NSMutableAttributedString alloc] initWithString:newStr attributes:dict];
     } else
         outStr = [self mutableCopy];
@@ -34,39 +33,60 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
             UIFont *newFont = (UIFont *)value;
             UIFont *prevFont;
             CGSize maxSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
-            CGRect curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
             CGFloat diff = 0.;
             BOOL fromSmall = NO, fromBig = NO;
-            do {
-                prevFont = newFont;
-                *bounds = curBounds;
-                if (CGSizeContainsSize(frame.size, curBounds.size)) { //smaller
-                    fromSmall = YES;
-                    if (!fromBig)
-                        diff = prevFont.pointSize;
-                    else
-                        diff /= 2;
-                    newFont = [prevFont fontWithSize:prevFont.pointSize + diff];
-                } else { //bigger
-                    fromBig = YES;
-                    if (!fromSmall)
-                        diff = prevFont.pointSize;
-                    else
-                        diff /= 2;
-                    newFont = [prevFont fontWithSize:prevFont.pointSize - diff];
-                }
-                [outStr removeAttribute:NSFontAttributeName range:range];
+            if (0. == *prevFontSize) {
+                CGRect curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+                do {
+                    prevFont = newFont;
+                    *bounds = curBounds;
+                    if (CGSizeContainsSize(frame.size, curBounds.size)) { //smaller
+                        fromSmall = YES;
+                        if (!fromBig)
+                            diff = prevFont.pointSize;
+                        else
+                            diff /= 2;
+                        newFont = [prevFont fontWithSize:prevFont.pointSize + diff];
+                    } else { //bigger
+                        fromBig = YES;
+                        if (!fromSmall)
+                            diff = prevFont.pointSize;
+                        else
+                            diff /= 2;
+                        newFont = [prevFont fontWithSize:prevFont.pointSize - diff];
+                    }
+                    [outStr addAttribute:NSFontAttributeName value:newFont range:range];
+                    curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+                    if (diff <= 1)
+                        break;
+                } while (1);
+            } else {
+                newFont = [newFont fontWithSize:*prevFontSize];
                 [outStr addAttribute:NSFontAttributeName value:newFont range:range];
-                curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-                if (diff <= 1)
-                    break;
-            } while (1);
-            if (textColor) {
-                [outStr removeAttribute:NSForegroundColorAttributeName range:range];
-                [outStr addAttributes:@{(NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor} range:range];
+                CGRect curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+                do {
+                    *bounds = curBounds;
+                    if (CGSizeContainsSize(frame.size, curBounds.size)) { //smaller
+                        fromSmall = YES;
+                        if (fromSmall && fromBig)
+                            break;
+                        prevFont = newFont;
+                        newFont = [prevFont fontWithSize:prevFont.pointSize + 1];
+                    } else { //bigger
+                        fromBig = YES;
+                        prevFont = newFont;
+                        newFont = [prevFont fontWithSize:prevFont.pointSize - 1];
+                    }
+                    [outStr addAttribute:NSFontAttributeName value:newFont range:range];
+                    curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+                } while (1);
+            }
+            if (color) {
+                [outStr addAttributes:@{(NSString *)kCTForegroundColorAttributeName: (__bridge id)color.CGColor} range:range];
             }
             (*bounds).origin.x += (frame.size.width - (*bounds).size.width) / 2.;
             (*bounds).origin.y += (frame.size.height - (*bounds).size.height) / 2.;
+            *prevFontSize = newFont.pointSize;
             *stop = YES;
         }
     }];

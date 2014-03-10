@@ -10,6 +10,6 @@
 
 @interface NSAttributedString (FitToFrame)
 
--(NSAttributedString *) fitToFrame:(CGRect)frame newString:(NSString *)newStr newTextColor:(UIColor*)textColor returnNewBounds:(CGRect*)bounds;
+-(NSAttributedString *) fitToFrame:(CGRect)frame newString:(NSString *)newStr newColor:(UIColor*)color prevFontSize:(CGFloat*)prevFontSize returnNewBounds:(CGRect*)bounds;
 
 @end

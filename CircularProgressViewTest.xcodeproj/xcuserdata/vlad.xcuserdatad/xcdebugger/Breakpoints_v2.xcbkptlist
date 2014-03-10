@@ -330,12 +330,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/NSAttributedString+FitToFrame.m"
-            timestampString = "416118565.252085"
+            timestampString = "416175761.604922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "-fitToFrame:newString:newTextColor:returnNewBounds:"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "-fitToFrame:newString:newColor:prevFontSize:returnNewBounds:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/UIView+CircularProgressView.m"
-            timestampString = "416093210.959932"
+            timestampString = "416175565.384952"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "-animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:"
             landmarkType = "5">
          </BreakpointContent>
@@ -362,12 +362,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/NSAttributedString+FitToFrame.m"
-            timestampString = "416118565.252085"
+            timestampString = "416175761.604922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "-fitToFrame:newString:newTextColor:returnNewBounds:"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "-fitToFrame:newString:newColor:prevFontSize:returnNewBounds:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -377,13 +377,91 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Categories/NSAttributedString+FitToFrame.m"
-            timestampString = "416118565.252085"
+            filePath = "Test/ViewController.m"
+            timestampString = "416161099.038445"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "-fitToFrame:newString:newTextColor:returnNewBounds:"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "-pressButton:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Categories/UIView+CircularProgressView.m"
+            timestampString = "416175565.384952"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
+            landmarkName = "-animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Categories/UIView+CircularProgressView.m"
+            timestampString = "416175565.384952"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "-animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[UIView(CircularProgressView) animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:]"
+                  moduleName = "CircularProgressViewTest"
+                  urlString = "file:///Users/vlad/CircularProgressView/Categories/UIView+CircularProgressView.m"
+                  timestampString = "416167000.665671"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "213"
+                  endingLineNumber = "213"
+                  offsetFromSymbolStart = "1972">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[UIView(CircularProgressView) animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:]"
+                  moduleName = "CircularProgressViewTest"
+                  urlString = "file:///Users/vlad/CircularProgressView/Categories/UIView+CircularProgressView.m"
+                  timestampString = "416167000.665875"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "213"
+                  endingLineNumber = "213"
+                  offsetFromSymbolStart = "1996">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Categories/NSAttributedString+FitToFrame.m"
+            timestampString = "416175761.604922"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "-fitToFrame:newString:newColor:prevFontSize:returnNewBounds:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

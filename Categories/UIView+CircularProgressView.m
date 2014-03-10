@@ -16,7 +16,7 @@
 
 static NSString *kCircularProgressViewShapeLayerName = @"CircularProgressView";
 static NSString *kCircularProgressViewBgroundShapeLayerName = @"CircularProgressViewBground";
-static NSUInteger const kCircularProgressViewKeyFrameLimit = 300;
+static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 #pragma mark public instance methods
 
@@ -100,24 +100,10 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 300;
     //need to caclulate frame for goal-1 first because it is widest themn we roll to current
     CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 26.0, NULL);//"HelveticaNeue-Light""Baskerville"
     
-    //create paragraph style and assign text alignment to it
-//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    paragraphStyle.alignment = NSTextAlignmentCenter;//NSTextAlignmentJustified;
-//    paragraphStyle.paragraphSpacing = 10; 
-    
-//    CTTextAlignment alignment = kCTCenterTextAlignment;
-//    CTLineBreakMode lineBreak = kCTLineBreakByClipping;
-//    CTParagraphStyleSetting settings[] = {{kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment},
-//        {kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreak), &lineBreak}};
-//    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, 2);
-
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName: CFBridgingRelease(fontRef),
                                                               (NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor,
-                                                              NSBackgroundColorAttributeName: backgroundColor}];//,
-                                                              //NSParagraphStyleAttributeName: paragraphStyle,
-                                                              //(NSString *)kCTParagraphStyleAttributeName:CFBridgingRelease(paragraphStyle)}];
-//    [attrStr addAttribute:(NSString *)kCTParagraphStyleAttributeName value:CFBridgingRelease(paragraphStyle) range:NSMakeRange(0, attrStr.length)];
+                                                              NSBackgroundColorAttributeName: backgroundColor}];
     txtLayer.string = attrStr;
 
     [shapeLayer addSublayer:txtLayer];
@@ -186,21 +172,12 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 300;
     }
     if (current == newCurrent && !force)
         return YES;
+    NSUInteger cur = current;
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
-    //slider
-    CABasicAnimation * pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    pathAnimation.duration = duration;
-    pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    pathAnimation.fromValue = @(((CGFloat)current) / max);
-    pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
-    pathAnimation.fillMode = kCAFillModeForwards;
-    pathAnimation.removedOnCompletion = NO;
-    [sliderLayer addAnimation:pathAnimation forKey:nil];
-
     //txt & txt bounds
     BOOL inc = (newCurrent >= current) ? YES : NO;
     NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
-    NSUInteger i, step = 1;
+    NSUInteger step = 1;
     if (0. == duration) {
         step = steps;
         steps = 0;
@@ -218,19 +195,20 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 300;
     NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
     NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
     CGRect newBounds;
-    valuesStr[0] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(current) stringValue] newTextColor:txtColor returnNewBounds:&newBounds];
+    CGFloat fontSize = 0;
+    valuesStr[0] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
     valuesBounds[0] = [NSValue valueWithCGRect:newBounds];
+    NSUInteger i;
     for (i = 1; i < steps; i++) {
-        valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(current) stringValue] newTextColor:txtColor returnNewBounds:&newBounds];
+        valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
         valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
         if (inc)
-            current += step;
+            cur += step;
         else
-            current -= step;
+            cur -= step;
     }
-    valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(newCurrent) stringValue] newTextColor:txtColor returnNewBounds:&newBounds];
+    valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
     valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-    //txt
     CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
     txtAnimation.values = valuesStr;
     txtAnimation.duration = duration;
@@ -246,7 +224,15 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 300;
     boundsAnimation.fillMode = kCAFillModeForwards;
     boundsAnimation.removedOnCompletion = NO;
     [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
-    
+    //slider
+    CABasicAnimation * pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    pathAnimation.duration = duration;
+    pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    pathAnimation.fromValue = @(((CGFloat)current) / max);
+    pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = NO;
+    [sliderLayer addAnimation:pathAnimation forKey:nil];
     return YES;
 }
 
