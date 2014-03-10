@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "GLOBAL">
+         <PersistentStrings>
+            <PersistentString
+               value = "diff">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.string">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.frame">
+            </PersistentString>
+            <PersistentString
+               value = "count">
+            </PersistentString>
+            <PersistentString
+               value = "newBounds">
+            </PersistentString>
+            <PersistentString
+               value = "shapeLayer.bounds">
+            </PersistentString>
+            <PersistentString
+               value = "shapeLayer.frame">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__94-[NSAttributedString(FitToFrame) fitToFrame:newAttributedString:newTextColor:returnNewBounds:]_block_invoke:NSAttributedString+FitToFrame.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "*bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(Slider360) addSlider360WithGoal:currentPosition:animationDuration:repeat:frame:backdround:]:UIView+Slider360.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "shapeLayer.bounds">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.string">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.name">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(CircularProgressView) animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:]:UIView+CircularProgressView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "(fps * duration) / steps">
+            </PersistentString>
+            <PersistentString
+               value = "steps / duration">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(Slider360) getSlider360CurrentPosition]:UIView+Slider360.m">
+      </ContextState>
+      <ContextState
+         contextName = "__96-[UIView(Slider360) animateSlider360:goal:currentPosition:newPosition:animationDuration:repeat:]_block_invoke:UIView+Slider360.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "((CGFloat)newCurrent)/goal">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__115-[UIView(RoundSlider) animateRoundSlider:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:]_block_invoke:UIView+RoundSlider.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "sliderLayer.strokeEnd">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(RoundSlider) animateRoundSlider:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:]:UIView+RoundSlider.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "pathAnimation.keyPath">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.frame">
+            </PersistentString>
+            <PersistentString
+               value = "(NSAttributedString *)(valuesStr[i])">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(GoalKeeper) addGoalKeeperWithGoal:currentPosition:animationDuration:repeat:frame:corners:colors:]:UIView+GoalKeeper.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "txtLayer.string">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.bounds">
+            </PersistentString>
+            <PersistentString
+               value = "txtLayer.frame">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[UIView(RoundSlider) getRoundSliderMax:andCurrent:]:UIView+RoundSlider.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "*max">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__49-[NSAttributedString(Fit4aFrame) mod2Fit4aFrame:]_block_invoke:NSAttributedString+Fit4aFrame.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "oldFont.pointSize">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[NSAttributedString(FitToFrame) fitToFrame:newAttributedString:newTextColor:returnNewBounds:]:NSAttributedString+FitToFrame.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "*bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
