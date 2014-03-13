@@ -104,22 +104,20 @@
 
 -(void)update
 {
-    CGRect thumbRect = [self getThumbRect];
-    self.pop.frame = CGRectOffset(thumbRect, 0, -thumbRect.size.height -5);
+    CGRect rect = [self getThumbRect];
+    self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
     CircularProgressViewAnimatingCompletionBlock completion = ^{
         //NSLog(@"Completion");
-        BOOL restore = NO;
         if (0 == self.pop.alpha) {
             self.pop.alpha = 1;
-            restore = YES;
-        }
-        UIGraphicsBeginImageContextWithOptions(self.pop.layer.bounds.size, self.pop.layer.opaque, 0);
-        [self.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        [self.backingSlider setThumbImage:img forState:UIControlStateNormal];
-        if (restore)
+            UIGraphicsBeginImageContextWithOptions(self.pop.layer.bounds.size, self.pop.layer.opaque, 0);
+            [self.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
+            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            [self.backingSlider setThumbImage:img forState:UIControlStateNormal];
             self.pop.alpha = 0;
+        } else
+            [self.backingSlider setThumbImage:nil forState:UIControlStateNormal];
     };
     if (self.backingSlider.value > self.backingSlider.maximumValue)
         self.backingSlider.value = self.backingSlider.maximumValue;
