@@ -35,7 +35,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jf6-L6-K1a" userLabel="Button - Tap">
-                                <rect key="frame" x="330" y="465" width="109" height="93"/>
+                                <rect key="frame" x="330" y="478" width="109" height="93"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="93" id="6Zu-oK-xCI"/>
@@ -48,25 +48,36 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dbj-X9-azh" customClass="ManageableVolumeView">
-                                <rect key="frame" x="20" y="301" width="728" height="45"/>
+                                <rect key="frame" x="20" y="301" width="728" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="YP2-s2-9FG"/>
+                                    <constraint firstAttribute="height" constant="50" id="YP2-s2-9FG"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VKZ-58-O7V" userLabel="Decorated UISlider" customClass="DecoratedUISlider">
+                                <rect key="frame" x="20" y="398" width="728" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="tbG-Nw-R5W"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="jf6-L6-K1a" firstAttribute="top" secondItem="VKZ-58-O7V" secondAttribute="bottom" constant="30" id="10J-o9-ckk"/>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="JTx-2F-i1W"/>
                             <constraint firstAttribute="centerX" secondItem="jf6-L6-K1a" secondAttribute="centerX" id="JVo-sU-Ewn"/>
+                            <constraint firstItem="VKZ-58-O7V" firstAttribute="top" secondItem="dbj-X9-azh" secondAttribute="bottom" constant="47" id="V0I-uL-XXY"/>
                             <constraint firstAttribute="trailing" secondItem="dbj-X9-azh" secondAttribute="trailing" constant="20" id="csb-Md-OOP"/>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="ibt-DT-a9H"/>
                             <constraint firstItem="dbj-X9-azh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="k5v-wb-9e3"/>
                             <constraint firstItem="dbj-X9-azh" firstAttribute="top" secondItem="veh-cs-2P3" secondAttribute="bottom" constant="175" id="mIU-lX-kLE"/>
-                            <constraint firstAttribute="centerY" secondItem="jf6-L6-K1a" secondAttribute="centerY" id="mQa-Q4-NaL"/>
+                            <constraint firstItem="VKZ-58-O7V" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="pla-6b-M6A"/>
                             <constraint firstAttribute="trailing" secondItem="efD-oO-j07" secondAttribute="trailing" constant="20" id="rvw-16-Tjy"/>
+                            <constraint firstAttribute="trailing" secondItem="VKZ-58-O7V" secondAttribute="trailing" constant="20" id="v3X-1z-s9e"/>
                             <constraint firstItem="efD-oO-j07" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="yag-OS-IaH"/>
                         </constraints>
                         <connections>

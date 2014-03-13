@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "CALayer+CircularProgressView.h"
-
-@interface PopUpView : UIView
-- (void)set:(float)value completion:(void (^)(void))completionBlock;
-@end
+#import "CircularProgressView.h"
 
 @interface ManageableVolumeView : MPVolumeView
+
 - (void)setValue:(float)value;
 @property (nonatomic) float minimumValue;
 @property (nonatomic) float maximumValue;
+
 @end

@@ -22,6 +22,8 @@
 		F5AAEF6B18CF81F8000CF6F8 /* ManageableVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */; };
 		F5AAEF6D18CF829E000CF6F8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */; };
 		F5AFC8EA18BE8DAB00438CD1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */; };
+		F5B2D07018D21F0F000F5311 /* CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D06F18D21F0F000F5311 /* CircularProgressView.m */; };
+		F5B2D07318D221BA000F5311 /* DecoratedUISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D07218D221BA000F5311 /* DecoratedUISlider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,10 @@
 		F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ManageableVolumeView.m; path = Subclasses/ManageableVolumeView.m; sourceTree = "<group>"; };
 		F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		F5B2D06E18D21F0F000F5311 /* CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircularProgressView.h; path = Subclasses/CircularProgressView.h; sourceTree = "<group>"; };
+		F5B2D06F18D21F0F000F5311 /* CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircularProgressView.m; path = Subclasses/CircularProgressView.m; sourceTree = "<group>"; };
+		F5B2D07118D221BA000F5311 /* DecoratedUISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoratedUISlider.h; path = Subclasses/DecoratedUISlider.h; sourceTree = "<group>"; };
+		F5B2D07218D221BA000F5311 /* DecoratedUISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DecoratedUISlider.m; path = Subclasses/DecoratedUISlider.m; sourceTree = "<group>"; };
 		F5FF9B8918A8DD58007B21AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -131,6 +137,10 @@
 			children = (
 				F5AAEF6918CF81F8000CF6F8 /* ManageableVolumeView.h */,
 				F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */,
+				F5B2D06E18D21F0F000F5311 /* CircularProgressView.h */,
+				F5B2D06F18D21F0F000F5311 /* CircularProgressView.m */,
+				F5B2D07118D221BA000F5311 /* DecoratedUISlider.h */,
+				F5B2D07218D221BA000F5311 /* DecoratedUISlider.m */,
 			);
 			name = Subclasses;
 			sourceTree = "<group>";
@@ -219,9 +229,11 @@
 			files = (
 				F54ADE8B18C993980020A098 /* ViewController.m in Sources */,
 				F54ADE7C18C992D30020A098 /* CALayer+CircularProgressView.m in Sources */,
+				F5B2D07318D221BA000F5311 /* DecoratedUISlider.m in Sources */,
 				F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */,
 				F54ADE8F18C993AD0020A098 /* main.m in Sources */,
 				F54ADE8818C993830020A098 /* AppDelegate.m in Sources */,
+				F5B2D07018D21F0F000F5311 /* CircularProgressView.m in Sources */,
 				F5AAEF6B18CF81F8000CF6F8 /* ManageableVolumeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

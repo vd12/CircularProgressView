@@ -9,8 +9,10 @@
 #import "ManageableVolumeView.h"
 
 @interface ManageableVolumeView()
+
 @property (weak, nonatomic) UISlider *backingSlider;
-@property (nonatomic) PopUpView *pop;
+@property (nonatomic) CircularProgressView *pop;
+
 @end
 
 @implementation ManageableVolumeView
@@ -35,14 +37,14 @@
     return self.backingSlider.minimumValue;
 }
 
--(id)initWithFrame:(CGRect)rect
+- (id)initWithFrame:(CGRect)rect
 {
     if ((self = [super initWithFrame:rect]))
         [self setup];
     return self;
 }
 
--(id)initWithCoder:(NSCoder*)coder //up from storyboard
+- (id)initWithCoder:(NSCoder*)coder //up from storyboard
 {
     if ((self = [super initWithCoder:coder]))
         [self setup];
@@ -52,31 +54,32 @@
 - (void)touchDown:(id)sender
 {
     [self update];
-    [self show:YES];
+    [self.pop show:YES animated:YES duration:.4];
 }
 
 - (void)touchUp:(id)sender
 {
-    [self show:NO];
+    [self.pop show:NO animated:YES duration:.4];
 }
 
 - (void)setup
 {
     for (UIView *view in [self subviews]) {
-        NSLog(@"%@ %@",[[view class] description], view);
+        //NSLog(@"%@ %@", [[view class] description], view);
 		if ([view isKindOfClass:[UISlider class]]) {
 			self.backingSlider = (UISlider *)view;
             break;
 		}
     }
     if (self.backingSlider) {
-        self.pop = [[PopUpView alloc] initWithFrame:[self getThumbRect]];
+        self.pop = [[CircularProgressView alloc] initWithFrame:[self getThumbRect]];
         self.pop.alpha = 0;
         [self.backingSlider addSubview:self.pop];
         [self.backingSlider addTarget:self action:@selector(changeVolume:) forControlEvents:UIControlEventValueChanged];
         [self.backingSlider addTarget:self action:@selector(touchDown:) forControlEvents:UIControlEventTouchDown];
         [self.backingSlider addTarget:self action:@selector(touchUp:) forControlEvents:UIControlEventTouchUpInside];
         [self.backingSlider addTarget:self action:@selector(touchUp:) forControlEvents:UIControlEventTouchUpOutside];
+        [self update];
     }
 }
 
@@ -91,18 +94,7 @@
     self.backingSlider.value = value;
 }
 
-- (void)show:(BOOL)show
-{
-    [UIView beginAnimations:@"popup" context:NULL];
-    [UIView setAnimationDuration:.2];
-    if (show)
-        self.pop.alpha = 1;
-    else
-        self.pop.alpha = 0;
-    [UIView commitAnimations];
-}
-
--(void)update
+- (void)update
 {
     CGRect rect = [self getThumbRect];
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
@@ -123,7 +115,7 @@
         self.backingSlider.value = self.backingSlider.maximumValue;
     else if (self.backingSlider.value < self.backingSlider.minimumValue)
         self.backingSlider.value = self.backingSlider.minimumValue;
-    [self.pop set:self.backingSlider.value completion:completion];
+    [self.pop set:self.backingSlider.value completion:completion newColorsAndWidth:nil];
 }
 
 - (CGRect)getThumbRect
@@ -140,29 +132,3 @@
 }
 
 @end
-
-
-@implementation PopUpView
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        NSDictionary *dict = @{kCircularProgressViewBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1],
-                               kCircularProgressViewBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
-                               kCircularProgressViewAnimatingCircleColorKey: [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1],
-                               kCircularProgressViewTextColorKey: [UIColor blackColor/*colorWithRed:0. green:1. blue:22./255. alpha:1.*/],
-                               kCircularProgressViewBgroundCircleWidthKey: @(2),
-                               kCircularProgressViewAnimatingCircleWidthKey: @(3)};
-        [self.layer addCircularProgressViewWithMax:100 currentPosition:0 newPosition:0 animationDuration:0. repeat:NO frame:self.layer.bounds corners:NO colorsAndWidth:dict completion:nil];    }
-    return self;
-}
-
-- (void)set:(float)value completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
-{
-    [self.layer setCircularProgressViewCurrentPosition:(NSUInteger)(value * 100. + .5) newColorsAndWidth:nil animationDuration:0 repeat:NO completion:completionBlock];
-}
-
-@end
-
