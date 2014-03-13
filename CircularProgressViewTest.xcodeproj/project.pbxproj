@@ -16,7 +16,6 @@
 		F54ADE8F18C993AD0020A098 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8C18C993AD0020A098 /* main.m */; };
 		F54ADE9318C993E10020A098 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F54ADE9118C993E10020A098 /* InfoPlist.strings */; };
 		F54ADE9B18C994120020A098 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F54ADE9A18C994120020A098 /* Images.xcassets */; };
-		F57C378318CFDAF1005EB310 /* SmileyRound.png in Resources */ = {isa = PBXBuildFile; fileRef = F57C378218CFDAF1005EB310 /* SmileyRound.png */; };
 		F596E62018A80D5B00EB2555 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E61F18A80D5B00EB2555 /* Foundation.framework */; };
 		F596E62218A80D5B00EB2555 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62118A80D5B00EB2555 /* CoreGraphics.framework */; };
 		F596E62418A80D5B00EB2555 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62318A80D5B00EB2555 /* UIKit.framework */; };
@@ -41,7 +40,6 @@
 		F54ADE8E18C993AD0020A098 /* CircularProgressViewTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CircularProgressViewTest-Prefix.pch"; path = "Test/CircularProgressViewTest-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		F54ADE9218C993E10020A098 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Test/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		F54ADE9A18C994120020A098 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Test/Images.xcassets; sourceTree = SOURCE_ROOT; };
-		F57C378218CFDAF1005EB310 /* SmileyRound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SmileyRound.png; path = "../temp/Programming-iOS-Book-Examples-master/bk2ch16p678mediaQuery/ch29p946mediaQuery/SmileyRound.png"; sourceTree = "<group>"; };
 		F596E61C18A80D5B00EB2555 /* CircularProgressViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CircularProgressViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F596E61F18A80D5B00EB2555 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F596E62118A80D5B00EB2555 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -75,7 +73,6 @@
 				F5AAEF6818CF8183000CF6F8 /* Subclasses */,
 				F515D25018CA81D60094794A /* Main_iPad.storyboard */,
 				F515D25218CA81D60094794A /* Main_iPhone.storyboard */,
-				F57C378218CFDAF1005EB310 /* SmileyRound.png */,
 				F5AE887618AAAD85007BF553 /* Categories */,
 				F596E62518A80D5B00EB2555 /* Test */,
 				F596E61E18A80D5B00EB2555 /* Frameworks */,
@@ -208,7 +205,6 @@
 			files = (
 				F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */,
 				F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */,
-				F57C378318CFDAF1005EB310 /* SmileyRound.png in Resources */,
 				F54ADE9318C993E10020A098 /* InfoPlist.strings in Resources */,
 				F54ADE9B18C994120020A098 /* Images.xcassets in Resources */,
 			);
