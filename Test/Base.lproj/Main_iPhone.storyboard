@@ -47,13 +47,24 @@
                                     <constraint firstAttribute="height" constant="31" id="VKt-UR-Rci"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Z6-rZ-ByU" customClass="ManageableVolumeView">
+                                <rect key="frame" x="20" y="168" width="280" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="wMs-85-Q6E"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="5DL-Ya-jaW" secondAttribute="trailing" constant="20" id="6RT-0u-EEJ"/>
                             <constraint firstItem="Gvp-1s-Gjp" firstAttribute="top" secondItem="ngp-LW-gFQ" secondAttribute="bottom" id="UgZ-5t-dl2"/>
+                            <constraint firstItem="5Z6-rZ-ByU" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="Vep-ex-T1j"/>
+                            <constraint firstAttribute="trailing" secondItem="5Z6-rZ-ByU" secondAttribute="trailing" constant="20" id="Y5e-vy-NDN"/>
                             <constraint firstItem="Gvp-1s-Gjp" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="bju-rq-4pR"/>
+                            <constraint firstItem="5Z6-rZ-ByU" firstAttribute="top" secondItem="Gvp-1s-Gjp" secondAttribute="bottom" constant="42" id="fny-mE-bI6"/>
                             <constraint firstItem="8dP-Bt-hUc" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="nTs-hk-Ssr"/>
                             <constraint firstItem="8dP-Bt-hUc" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" id="vr1-4g-IED"/>
                             <constraint firstItem="5DL-Ya-jaW" firstAttribute="top" secondItem="ngp-LW-gFQ" secondAttribute="bottom" id="wIr-lo-CCH"/>
@@ -70,6 +81,7 @@
                         <outlet property="buttonPress" destination="8dP-Bt-hUc" id="gxX-eD-Tfv"/>
                         <outlet property="leftView" destination="Gvp-1s-Gjp" id="YcT-Qk-g9J"/>
                         <outlet property="rightView" destination="5DL-Ya-jaW" id="baw-7B-YA8"/>
+                        <outlet property="volumeView" destination="5Z6-rZ-ByU" id="zlk-2S-2GL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

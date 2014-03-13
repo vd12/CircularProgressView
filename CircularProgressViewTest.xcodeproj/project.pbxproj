@@ -10,15 +10,18 @@
 		F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25018CA81D60094794A /* Main_iPad.storyboard */; };
 		F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25218CA81D60094794A /* Main_iPhone.storyboard */; };
 		F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */; };
-		F54ADE7C18C992D30020A098 /* UIView+CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7A18C992D30020A098 /* UIView+CircularProgressView.m */; };
+		F54ADE7C18C992D30020A098 /* CALayer+CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */; };
 		F54ADE8818C993830020A098 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8718C993830020A098 /* AppDelegate.m */; };
 		F54ADE8B18C993980020A098 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8A18C993980020A098 /* ViewController.m */; };
 		F54ADE8F18C993AD0020A098 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8C18C993AD0020A098 /* main.m */; };
 		F54ADE9318C993E10020A098 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F54ADE9118C993E10020A098 /* InfoPlist.strings */; };
 		F54ADE9B18C994120020A098 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F54ADE9A18C994120020A098 /* Images.xcassets */; };
+		F57C378318CFDAF1005EB310 /* SmileyRound.png in Resources */ = {isa = PBXBuildFile; fileRef = F57C378218CFDAF1005EB310 /* SmileyRound.png */; };
 		F596E62018A80D5B00EB2555 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E61F18A80D5B00EB2555 /* Foundation.framework */; };
 		F596E62218A80D5B00EB2555 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62118A80D5B00EB2555 /* CoreGraphics.framework */; };
 		F596E62418A80D5B00EB2555 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62318A80D5B00EB2555 /* UIKit.framework */; };
+		F5AAEF6B18CF81F8000CF6F8 /* ManageableVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */; };
+		F5AAEF6D18CF829E000CF6F8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */; };
 		F5AFC8EA18BE8DAB00438CD1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,8 +30,8 @@
 		F515D25318CA81D60094794A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Test/Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		F54ADE7718C992D30020A098 /* NSAttributedString+FitToFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSAttributedString+FitToFrame.h"; path = "Categories/NSAttributedString+FitToFrame.h"; sourceTree = "<group>"; };
 		F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+FitToFrame.m"; path = "Categories/NSAttributedString+FitToFrame.m"; sourceTree = "<group>"; };
-		F54ADE7918C992D30020A098 /* UIView+CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+CircularProgressView.h"; path = "Categories/UIView+CircularProgressView.h"; sourceTree = "<group>"; };
-		F54ADE7A18C992D30020A098 /* UIView+CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+CircularProgressView.m"; path = "Categories/UIView+CircularProgressView.m"; sourceTree = "<group>"; };
+		F54ADE7918C992D30020A098 /* CALayer+CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+CircularProgressView.h"; path = "Categories/CALayer+CircularProgressView.h"; sourceTree = "<group>"; };
+		F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+CircularProgressView.m"; path = "Categories/CALayer+CircularProgressView.m"; sourceTree = "<group>"; };
 		F54ADE8618C993830020A098 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Test/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		F54ADE8718C993830020A098 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Test/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F54ADE8918C993980020A098 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Test/ViewController.h; sourceTree = SOURCE_ROOT; };
@@ -38,11 +41,14 @@
 		F54ADE8E18C993AD0020A098 /* CircularProgressViewTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CircularProgressViewTest-Prefix.pch"; path = "Test/CircularProgressViewTest-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		F54ADE9218C993E10020A098 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Test/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		F54ADE9A18C994120020A098 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Test/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		F57C378218CFDAF1005EB310 /* SmileyRound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SmileyRound.png; path = "../temp/Programming-iOS-Book-Examples-master/bk2ch16p678mediaQuery/ch29p946mediaQuery/SmileyRound.png"; sourceTree = "<group>"; };
 		F596E61C18A80D5B00EB2555 /* CircularProgressViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CircularProgressViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F596E61F18A80D5B00EB2555 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F596E62118A80D5B00EB2555 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F596E62318A80D5B00EB2555 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		F596E64118A80D5B00EB2555 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		F5AAEF6918CF81F8000CF6F8 /* ManageableVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ManageableVolumeView.h; path = Subclasses/ManageableVolumeView.h; sourceTree = "<group>"; };
+		F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ManageableVolumeView.m; path = Subclasses/ManageableVolumeView.m; sourceTree = "<group>"; };
+		F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F5FF9B8918A8DD58007B21AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -52,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5AAEF6D18CF829E000CF6F8 /* MediaPlayer.framework in Frameworks */,
 				F5AFC8EA18BE8DAB00438CD1 /* CoreText.framework in Frameworks */,
 				F596E62218A80D5B00EB2555 /* CoreGraphics.framework in Frameworks */,
 				F596E62418A80D5B00EB2555 /* UIKit.framework in Frameworks */,
@@ -65,8 +72,10 @@
 		F596E61318A80D5B00EB2555 = {
 			isa = PBXGroup;
 			children = (
+				F5AAEF6818CF8183000CF6F8 /* Subclasses */,
 				F515D25018CA81D60094794A /* Main_iPad.storyboard */,
 				F515D25218CA81D60094794A /* Main_iPhone.storyboard */,
+				F57C378218CFDAF1005EB310 /* SmileyRound.png */,
 				F5AE887618AAAD85007BF553 /* Categories */,
 				F596E62518A80D5B00EB2555 /* Test */,
 				F596E61E18A80D5B00EB2555 /* Frameworks */,
@@ -85,12 +94,12 @@
 		F596E61E18A80D5B00EB2555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */,
 				F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */,
 				F5FF9B8918A8DD58007B21AC /* QuartzCore.framework */,
 				F596E61F18A80D5B00EB2555 /* Foundation.framework */,
 				F596E62118A80D5B00EB2555 /* CoreGraphics.framework */,
 				F596E62318A80D5B00EB2555 /* UIKit.framework */,
-				F596E64118A80D5B00EB2555 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -120,13 +129,22 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F5AAEF6818CF8183000CF6F8 /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				F5AAEF6918CF81F8000CF6F8 /* ManageableVolumeView.h */,
+				F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */,
+			);
+			name = Subclasses;
+			sourceTree = "<group>";
+		};
 		F5AE887618AAAD85007BF553 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
 				F54ADE7718C992D30020A098 /* NSAttributedString+FitToFrame.h */,
 				F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */,
-				F54ADE7918C992D30020A098 /* UIView+CircularProgressView.h */,
-				F54ADE7A18C992D30020A098 /* UIView+CircularProgressView.m */,
+				F54ADE7918C992D30020A098 /* CALayer+CircularProgressView.h */,
+				F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -190,6 +208,7 @@
 			files = (
 				F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */,
 				F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */,
+				F57C378318CFDAF1005EB310 /* SmileyRound.png in Resources */,
 				F54ADE9318C993E10020A098 /* InfoPlist.strings in Resources */,
 				F54ADE9B18C994120020A098 /* Images.xcassets in Resources */,
 			);
@@ -203,10 +222,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54ADE8B18C993980020A098 /* ViewController.m in Sources */,
-				F54ADE7C18C992D30020A098 /* UIView+CircularProgressView.m in Sources */,
+				F54ADE7C18C992D30020A098 /* CALayer+CircularProgressView.m in Sources */,
 				F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */,
 				F54ADE8F18C993AD0020A098 /* main.m in Sources */,
 				F54ADE8818C993830020A098 /* AppDelegate.m in Sources */,
+				F5AAEF6B18CF81F8000CF6F8 /* ManageableVolumeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

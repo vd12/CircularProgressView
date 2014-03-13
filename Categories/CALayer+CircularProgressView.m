@@ -7,10 +7,10 @@
 //
 
 #import <CoreText/CoreText.h>
-#import "UIView+CircularProgressView.h"
+#import "CALayer+CircularProgressView.h"
 #import "NSAttributedString+FitToFrame.h"
 
-@implementation UIView (CircularProgressView)
+@implementation CALayer (CircularProgressView)
 
 #pragma mark private constants
 
@@ -20,25 +20,25 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 #pragma mark public instance methods
 
--(BOOL) addCircularProgressViewWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary*)dict
+-(BOOL) addCircularProgressViewWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary*)dict completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
 {
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
-    UIColor *backgroundColor = [dict objectForKey:kCircularProgressViewBgroundColorKey];
-    if (!backgroundColor)
-        backgroundColor = [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.];
-    UIColor *backgroundCircleColor = [dict objectForKey:kCircularProgressViewBgroundCircleColorKey];
-    if (!backgroundCircleColor)
-        backgroundCircleColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:1.];
+    UIColor *bgroundColor = [dict objectForKey:kCircularProgressViewBgroundColorKey];
+    if (!bgroundColor)
+        bgroundColor = [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.];
+    UIColor *bgroundCircleColor = [dict objectForKey:kCircularProgressViewBgroundCircleColorKey];
+    if (!bgroundCircleColor)
+        bgroundCircleColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:1.];
     UIColor *animatingCircleColor = [dict objectForKey:kCircularProgressViewAnimatingCircleColorKey];
     if (!animatingCircleColor)
         animatingCircleColor = [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1.];
     UIColor *textColor = [dict objectForKey:kCircularProgressViewTextColorKey];
     if (!textColor)
         textColor = [UIColor blackColor];
-    NSNumber *backgroundCircleWidth = [dict objectForKey:kCircularProgressViewBgroundCircleWidthKey];
-    if (!backgroundCircleWidth)
-        backgroundCircleWidth = @(2); // default;
+    NSNumber *bgroundCircleWidth = [dict objectForKey:kCircularProgressViewBgroundCircleWidthKey];
+    if (!bgroundCircleWidth)
+        bgroundCircleWidth = @(2); // default;
     NSNumber *animatingCircleWidth = [dict objectForKey:kCircularProgressViewAnimatingCircleWidthKey];
     if (!animatingCircleWidth)
         animatingCircleWidth = @(8);
@@ -49,9 +49,9 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
         shapeLayer = [CAShapeLayer layer];
         shapeLayer.zPosition = CGFLOAT_MAX;
         shapeLayer.frame = frame;
-        shapeLayer.backgroundColor = backgroundColor.CGColor;
+        shapeLayer.backgroundColor = bgroundColor.CGColor;
         shapeLayer.name = kCircularProgressViewBgroundShapeLayerName;
-        [self.layer addSublayer:shapeLayer];
+        [self addSublayer:shapeLayer];
     }
     
     shapeLayer = [CAShapeLayer layer];
@@ -59,16 +59,16 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     shapeLayer.frame = frame;
     CGFloat sqSize = MIN(CGRectGetWidth(shapeLayer.bounds), CGRectGetHeight(shapeLayer.bounds));
     CGRect bounds = CGRectMake((CGRectGetWidth(shapeLayer.bounds) - sqSize) / 2., (CGRectGetHeight(shapeLayer.bounds) - sqSize) / 2., sqSize, sqSize);
-    CGFloat inset = ([animatingCircleWidth floatValue] - [backgroundCircleWidth floatValue]) / 2.;
+    CGFloat inset = ([animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue]) / 2.;
     shapeLayer.bounds = CGRectInset(bounds, inset, inset);
     CGPoint center = CGPointMake( shapeLayer.bounds.origin.x + CGRectGetWidth(shapeLayer.bounds) / 2., shapeLayer.bounds.origin.y + CGRectGetHeight(shapeLayer.bounds) / 2.);
-    inset = [backgroundCircleWidth floatValue] / 2.;
+    inset = [bgroundCircleWidth floatValue] / 2.;
     bounds = CGRectInset(shapeLayer.bounds, inset, inset);
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter: center radius:bounds.size.height / 2. startAngle:-M_PI_2 endAngle:M_PI+M_PI_2 clockwise:YES];
     shapeLayer.path = path.CGPath;
-    shapeLayer.strokeColor = backgroundCircleColor.CGColor;
-    shapeLayer.fillColor = backgroundColor.CGColor;
-    shapeLayer.lineWidth = [backgroundCircleWidth floatValue];
+    shapeLayer.strokeColor = bgroundCircleColor.CGColor;
+    shapeLayer.fillColor = bgroundColor.CGColor;
+    shapeLayer.lineWidth = [bgroundCircleWidth floatValue];
     shapeLayer.strokeStart = 0.;
     shapeLayer.strokeEnd = 1.;
     shapeLayer.name = kCircularProgressViewShapeLayerName;
@@ -79,7 +79,7 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     sliderLayer.bounds = shapeLayer.bounds;
     sliderLayer.path = path.CGPath;
     sliderLayer.strokeColor = animatingCircleColor.CGColor;
-    sliderLayer.fillColor = backgroundColor.CGColor;
+    sliderLayer.fillColor = bgroundColor.CGColor;
     sliderLayer.lineWidth = [animatingCircleWidth floatValue];
     sliderLayer.strokeStart = sliderLayer.strokeEnd = 0.;
 
@@ -88,10 +88,10 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     //additional 1 transparent to get bounds fitted in round!!
     CATextLayer *txtLayer = [CATextLayer layer];
     txtLayer.zPosition = CGFLOAT_MAX;
-    CGFloat sqSize1 = (( sqSize - [animatingCircleWidth floatValue] - [backgroundCircleWidth floatValue] ) / 2.) * sqrtf(2.);
+    CGFloat sqSize1 = (( sqSize - [animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue] ) / 2.) * sqrtf(2.);
     inset = (sqSize - sqSize1) / 2.;
     txtLayer.frame = CGRectInset(shapeLayer.bounds, inset, inset);
-    txtLayer.backgroundColor = backgroundColor.CGColor;//animatingCircleColor.CGColor;
+    txtLayer.backgroundColor = bgroundColor.CGColor;//animatingCircleColor.CGColor;
     txtLayer.foregroundColor = textColor.CGColor;
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, current];//[@(current) stringValue];
     txtLayer.alignmentMode = kCAAlignmentCenter;
@@ -103,14 +103,14 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName: CFBridgingRelease(fontRef),
                                                               (NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor,
-                                                              NSBackgroundColorAttributeName: backgroundColor}];
+                                                              NSBackgroundColorAttributeName: bgroundColor}];
     txtLayer.string = attrStr;
 
     [shapeLayer addSublayer:txtLayer];
 
-    [self.layer addSublayer:shapeLayer];
+    [self addSublayer:shapeLayer];
     
-    return [self animateCircularProgressView:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat force:YES];
+    return [self animateCircularProgressView:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat force:YES completion:completionBlock];
 }
 
 -(void) removeCircularProgressView
@@ -119,12 +119,12 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     [[self findCircularProgressViewShapelayer:kCircularProgressViewBgroundShapeLayerName] removeFromSuperlayer];
 }
 
--(BOOL) setCircularProgressViewCurrentPosition:(NSUInteger)newCurrent newColorsAndWidth:(NSDictionary*)dict animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat
+-(BOOL) setCircularProgressViewCurrentPosition:(NSUInteger)newCurrent newColorsAndWidth:(NSDictionary*)dict animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
 {
     NSUInteger max, current;
     CAShapeLayer *shapeLayer;
     if ((shapeLayer = [self getCircularProgressViewMax:&max andCurrent:&current]))
-        return [self animateCircularProgressView:shapeLayer max:max currentPosition:current newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat force:NO];
+        return [self animateCircularProgressView:shapeLayer max:max currentPosition:current newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat force:NO completion:completionBlock];
     else
         return NO;
 }
@@ -143,23 +143,30 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 #pragma mark private instance methods
 
--(BOOL) animateCircularProgressView:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat force:(BOOL)force
+-(BOOL) animateCircularProgressView:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat force:(BOOL)force completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
 {
-    if (!shapeLayer || current > max || newCurrent > max) //sanity check
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        if(completionBlock)
+            completionBlock();
+    }];
+    if (!shapeLayer || current > max || newCurrent > max) { //sanity check
+        [CATransaction commit];
         return NO;
+    }
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
 
-    UIColor *backgroundColor = [colors objectForKey:kCircularProgressViewBgroundColorKey];
-    if (backgroundColor) {
-        [self findCircularProgressViewShapelayer:kCircularProgressViewBgroundShapeLayerName].backgroundColor = backgroundColor.CGColor;
-        shapeLayer.fillColor = backgroundColor.CGColor;
-        sliderLayer.fillColor = backgroundColor.CGColor;
-        txtLayer.backgroundColor = backgroundColor.CGColor;
+    UIColor *bgroundColor = [colors objectForKey:kCircularProgressViewBgroundColorKey];
+    if (bgroundColor) {
+        [self findCircularProgressViewShapelayer:kCircularProgressViewBgroundShapeLayerName].backgroundColor = bgroundColor.CGColor;
+        shapeLayer.fillColor = bgroundColor.CGColor;
+        sliderLayer.fillColor = bgroundColor.CGColor;
+        txtLayer.backgroundColor = bgroundColor.CGColor;
     }
-    UIColor *backgroundCircleColor = [colors objectForKey:kCircularProgressViewBgroundCircleColorKey];
-    if (backgroundCircleColor)
-        shapeLayer.strokeColor = backgroundCircleColor.CGColor;
+    UIColor *bgroundCircleColor = [colors objectForKey:kCircularProgressViewBgroundCircleColorKey];
+    if (bgroundCircleColor)
+        shapeLayer.strokeColor = bgroundCircleColor.CGColor;
     UIColor *animatingCircleColor = [colors objectForKey:kCircularProgressViewAnimatingCircleColorKey];
     if (animatingCircleColor)
         sliderLayer.strokeColor = animatingCircleColor.CGColor;
@@ -170,14 +177,18 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
             force = YES;
         }
     }
-    if (current == newCurrent && !force)
+    if (current == newCurrent && !force) {
+        [CATransaction commit];
         return YES;
+    }
     NSUInteger cur = current;
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
     //txt & txt bounds
     BOOL inc = (newCurrent >= current) ? YES : NO;
     NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
     NSUInteger step = 1;
+    CGRect newBounds;
+    CGFloat fontSize = 0;
     if (0. == duration) {
         step = steps;
         steps = 0;
@@ -194,8 +205,6 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     }
     NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
     NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
-    CGRect newBounds;
-    CGFloat fontSize = 0;
     valuesStr[0] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
     valuesBounds[0] = [NSValue valueWithCGRect:newBounds];
     NSUInteger i;
@@ -233,12 +242,13 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     pathAnimation.fillMode = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
     [sliderLayer addAnimation:pathAnimation forKey:nil];
+    [CATransaction commit];
     return YES;
 }
 
 -(CAShapeLayer *) findCircularProgressViewShapelayer: (NSString *)layerName
 {
-    for (CALayer *layer in self.layer.sublayers) {
+    for (CALayer *layer in self.sublayers) {
         if ([layer isKindOfClass:[CAShapeLayer class]] && [layer.name isEqualToString:layerName])
             return (CAShapeLayer *)layer;
     }

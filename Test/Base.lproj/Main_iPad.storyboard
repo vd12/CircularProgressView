@@ -47,13 +47,24 @@
                                     <action selector="pressButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OGV-9w-EVu"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dbj-X9-azh" customClass="ManageableVolumeView">
+                                <rect key="frame" x="20" y="301" width="728" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="YP2-s2-9FG"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="JTx-2F-i1W"/>
                             <constraint firstAttribute="centerX" secondItem="jf6-L6-K1a" secondAttribute="centerX" id="JVo-sU-Ewn"/>
+                            <constraint firstAttribute="trailing" secondItem="dbj-X9-azh" secondAttribute="trailing" constant="20" id="csb-Md-OOP"/>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="ibt-DT-a9H"/>
+                            <constraint firstItem="dbj-X9-azh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="k5v-wb-9e3"/>
+                            <constraint firstItem="dbj-X9-azh" firstAttribute="top" secondItem="veh-cs-2P3" secondAttribute="bottom" constant="175" id="mIU-lX-kLE"/>
                             <constraint firstAttribute="centerY" secondItem="jf6-L6-K1a" secondAttribute="centerY" id="mQa-Q4-NaL"/>
                             <constraint firstAttribute="trailing" secondItem="efD-oO-j07" secondAttribute="trailing" constant="20" id="rvw-16-Tjy"/>
                             <constraint firstItem="efD-oO-j07" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="yag-OS-IaH"/>
@@ -69,6 +80,7 @@
                         <outlet property="buttonPress" destination="jf6-L6-K1a" id="wwh-6z-msm"/>
                         <outlet property="leftView" destination="veh-cs-2P3" id="5om-qK-3n8"/>
                         <outlet property="rightView" destination="efD-oO-j07" id="3sS-Aw-aJh"/>
+                        <outlet property="volumeView" destination="dbj-X9-azh" id="NDm-tN-eJv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
