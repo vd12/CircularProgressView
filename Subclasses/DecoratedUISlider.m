@@ -40,34 +40,38 @@
 
 -(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
-    [self update];
-    [self.pop show:YES animated:NO duration:0];
-    BOOL ret = [super beginTrackingWithTouch:touch withEvent:event];
-    return ret;
+    NSLog(@"%s",__func__);
+    if ([super beginTrackingWithTouch:touch withEvent:event]) {
+        [self update];
+        [self.pop show:YES animated:NO duration:0];
+        return YES;
+    }
+    return NO;
 }
 
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
+    NSLog(@"%s",__func__);
+    [super endTrackingWithTouch:touch withEvent:event];
     [self update];
     [self.pop show:NO animated:NO duration:0];
-    [super endTrackingWithTouch:touch withEvent:event];
 }
 
 - (void)cancelTrackingWithEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
+    NSLog(@"%s",__func__);
+    [super cancelTrackingWithEvent:event];
     [self update];
     [self.pop show:NO animated:NO duration:0];
-    [super cancelTrackingWithEvent:event];
 }
 
 -(BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
-    [self update];
+    NSLog(@"%s",__func__);
     BOOL ret = [super continueTrackingWithTouch:touch withEvent:event];
+    [self update];
+    if (!ret)
+        [self.pop show:NO animated:NO duration:0];
     return ret;
 }
 
@@ -75,18 +79,20 @@
 {
     CGRect rect = [self getThumbRect];
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
+    DecoratedUISlider * __weak weakSelf = self;
     CircularProgressViewAnimatingCompletionBlock completion = ^{
+        DecoratedUISlider *strongSelf = weakSelf;
         //NSLog(@"Completion");
-        if (0 == self.pop.alpha) {
-            self.pop.alpha = 1;
-            UIGraphicsBeginImageContextWithOptions(self.pop.layer.bounds.size, self.pop.layer.opaque, 0);
-            [self.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
+        if (0 == strongSelf.pop.alpha) {
+            strongSelf.pop.alpha = 1;
+            UIGraphicsBeginImageContextWithOptions(strongSelf.pop.layer.bounds.size, strongSelf.pop.layer.opaque, 0);
+            [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
-            [self setThumbImage:img forState:UIControlStateNormal];
-            self.pop.alpha = 0;
+            [strongSelf setThumbImage:img forState:UIControlStateNormal];
+            strongSelf.pop.alpha = 0;
         } else
-            [self setThumbImage:nil forState:UIControlStateNormal];
+            [strongSelf setThumbImage:nil forState:UIControlStateNormal];
     };
     [self.pop set:self.value completion:completion newColorsAndWidth:nil];
 }

@@ -54,12 +54,12 @@
 - (void)touchDown:(id)sender
 {
     [self update];
-    [self.pop show:YES animated:YES duration:.4];
+    [self.pop show:YES animated:YES duration:.2];
 }
 
 - (void)touchUp:(id)sender
 {
-    [self.pop show:NO animated:YES duration:.4];
+    [self.pop show:NO animated:YES duration:.2];
 }
 
 - (void)setup
@@ -98,18 +98,20 @@
 {
     CGRect rect = [self getThumbRect];
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
+    ManageableVolumeView * __weak weakSelf = self;
     CircularProgressViewAnimatingCompletionBlock completion = ^{
+        ManageableVolumeView *strongSelf = weakSelf;
         //NSLog(@"Completion");
-        if (0 == self.pop.alpha) {
-            self.pop.alpha = 1;
-            UIGraphicsBeginImageContextWithOptions(self.pop.layer.bounds.size, self.pop.layer.opaque, 0);
-            [self.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
+        if (0 == strongSelf.pop.alpha) {
+            strongSelf.pop.alpha = 1;
+            UIGraphicsBeginImageContextWithOptions(strongSelf.pop.layer.bounds.size, strongSelf.pop.layer.opaque, 0);
+            [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
-            [self.backingSlider setThumbImage:img forState:UIControlStateNormal];
-            self.pop.alpha = 0;
+            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
+            strongSelf.pop.alpha = 0;
         } else
-            [self.backingSlider setThumbImage:nil forState:UIControlStateNormal];
+            [strongSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];
     };
     if (self.backingSlider.value > self.backingSlider.maximumValue)
         self.backingSlider.value = self.backingSlider.maximumValue;
