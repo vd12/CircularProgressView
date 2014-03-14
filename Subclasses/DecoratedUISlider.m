@@ -40,7 +40,7 @@
 
 -(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__func__);
+    //NSLog(@"%s",__func__);
     if ([super beginTrackingWithTouch:touch withEvent:event]) {
         [self update];
         [self.pop show:YES animated:NO duration:0];
@@ -51,7 +51,7 @@
 
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__func__);
+    //NSLog(@"%s",__func__);
     [super endTrackingWithTouch:touch withEvent:event];
     [self update];
     [self.pop show:NO animated:NO duration:0];
@@ -59,7 +59,7 @@
 
 - (void)cancelTrackingWithEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__func__);
+    //NSLog(@"%s",__func__);
     [super cancelTrackingWithEvent:event];
     [self update];
     [self.pop show:NO animated:NO duration:0];
@@ -67,7 +67,7 @@
 
 -(BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    NSLog(@"%s",__func__);
+    //NSLog(@"%s",__func__);
     BOOL ret = [super continueTrackingWithTouch:touch withEvent:event];
     [self update];
     if (!ret)
