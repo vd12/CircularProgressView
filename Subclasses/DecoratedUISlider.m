@@ -40,13 +40,13 @@
 
 -(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
-    if ([super beginTrackingWithTouch:touch withEvent:event]) {
+    BOOL ret = [super beginTrackingWithTouch:touch withEvent:event];
+    //NSLog(@"%s %d",__func__, ret);
+    if (ret) {
         [self update];
         [self.pop show:YES animated:NO duration:0];
-        return YES;
     }
-    return NO;
+    return ret;
 }
 
 -(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
@@ -67,8 +67,8 @@
 
 -(BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    //NSLog(@"%s",__func__);
     BOOL ret = [super continueTrackingWithTouch:touch withEvent:event];
+    //NSLog(@"%s %d",__func__, ret);
     [self update];
     if (!ret)
         [self.pop show:NO animated:NO duration:0];

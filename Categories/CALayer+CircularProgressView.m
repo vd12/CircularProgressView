@@ -98,12 +98,13 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     txtLayer.contentsGravity = kCAGravityBottom;
 
     //need to caclulate frame for goal-1 first because it is widest themn we roll to current
-    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 26.0, NULL);//"HelveticaNeue-Light""Baskerville"
+    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL);//"HelveticaNeue-Light""Baskerville"
     
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
-                                                attributes:@{ (NSString *)kCTFontAttributeName: CFBridgingRelease(fontRef),
-                                                              (NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor,
-                                                              NSBackgroundColorAttributeName: bgroundColor}];
+                                                attributes:@{ (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
+                                                              (NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor}];
+    CFRelease(fontRef);
+    
     txtLayer.string = attrStr;
 
     [shapeLayer addSublayer:txtLayer];
