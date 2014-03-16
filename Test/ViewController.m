@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "CALayer+CircularProgressView.h"
 #import "ManageableVolumeView.h"
+#import "DecoratedUISlider.h"
 
 @interface ViewController ()
 - (IBAction)pressButton:(id)sender;
@@ -16,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIView *leftView;
 @property (weak, nonatomic) IBOutlet UIView *rightView;
 @property (weak, nonatomic) IBOutlet ManageableVolumeView *volumeView;
+@property (weak, nonatomic) IBOutlet DecoratedUISlider *slider;
 @end
 
 @implementation ViewController
@@ -37,6 +39,7 @@
     self.volumeView.minimumValue = .25;
     self.volumeView.maximumValue = .75;
     self.volumeView.value = .7;
+    self.slider.value = 1.;
 }
 
 - (IBAction)pressButton:(UIButton*)sender

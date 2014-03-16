@@ -22,6 +22,7 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 -(BOOL) addCircularProgressViewWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary*)dict completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
 {
+    [ self removeCircularProgressViewAnimations];
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
     UIColor *bgroundColor = [dict objectForKey:kCircularProgressViewBgroundColorKey];
@@ -98,7 +99,7 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     txtLayer.contentsGravity = kCAGravityBottom;
 
     //need to caclulate frame for goal-1 first because it is widest themn we roll to current
-    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL);//"HelveticaNeue-Light""Baskerville"
+    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL);//"Chalkduster""HelveticaNeue-Light""Baskerville"
     
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
@@ -116,6 +117,7 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 -(void) removeCircularProgressView
 {
+    [ self removeCircularProgressViewAnimations];
     [[self findCircularProgressViewShapelayer:kCircularProgressViewShapeLayerName] removeFromSuperlayer];
     [[self findCircularProgressViewShapelayer:kCircularProgressViewBgroundShapeLayerName] removeFromSuperlayer];
 }
@@ -144,17 +146,18 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
 
 #pragma mark private instance methods
 
+- (void) removeCircularProgressViewAnimations
+{
+    [self removeAllAnimations];
+    for (CALayer* layer in [self sublayers])
+        [layer removeAllAnimations];
+}
+
 -(BOOL) animateCircularProgressView:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat force:(BOOL)force completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock
 {
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        if(completionBlock)
-            completionBlock();
-    }];
-    if (!shapeLayer || current > max || newCurrent > max) { //sanity check
-        [CATransaction commit];
+    [ self removeCircularProgressViewAnimations];
+    if (!shapeLayer || current > max || newCurrent > max) //sanity check
         return NO;
-    }
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
 
@@ -178,6 +181,12 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
             force = YES;
         }
     }
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [ self removeCircularProgressViewAnimations];
+        if(completionBlock)
+            completionBlock();
+    }];
     if (current == newCurrent && !force) {
         [CATransaction commit];
         return YES;
@@ -235,14 +244,14 @@ static NSUInteger const kCircularProgressViewKeyFrameLimit = 1000;
     boundsAnimation.removedOnCompletion = NO;
     [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
     //slider
-    CABasicAnimation * pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     pathAnimation.duration = duration;
     pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
     pathAnimation.fromValue = @(((CGFloat)current) / max);
     pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
     pathAnimation.fillMode = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
-    [sliderLayer addAnimation:pathAnimation forKey:nil];
+    [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
     [CATransaction commit];
     return YES;
 }

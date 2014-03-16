@@ -98,25 +98,27 @@
 {
     CGRect rect = [self getThumbRect];
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
-    ManageableVolumeView * __weak weakSelf = self;
-    CircularProgressViewAnimatingCompletionBlock completion = ^{
-        ManageableVolumeView *strongSelf = weakSelf;
-        //NSLog(@"Completion");
-        if (0 == strongSelf.pop.alpha) {
-            strongSelf.pop.alpha = 1;
-            UIGraphicsBeginImageContextWithOptions(strongSelf.pop.layer.bounds.size, strongSelf.pop.layer.opaque, 0);
-            [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
-            strongSelf.pop.alpha = 0;
-        } else
-            [strongSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];
-    };
     if (self.backingSlider.value > self.backingSlider.maximumValue)
         self.backingSlider.value = self.backingSlider.maximumValue;
     else if (self.backingSlider.value < self.backingSlider.minimumValue)
         self.backingSlider.value = self.backingSlider.minimumValue;
+    ManageableVolumeView * __weak weakSelf = self;
+    CircularProgressViewAnimatingCompletionBlock completion = ^{
+        //NSLog(@"Completion");
+        ManageableVolumeView *strongSelf = weakSelf;
+        if (0 == strongSelf.pop.alpha) {
+            strongSelf.pop.alpha = 1;
+            UIGraphicsBeginImageContext(strongSelf.pop.layer.bounds.size);
+            [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
+            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
+            UIGraphicsEndImageContext();
+            strongSelf.pop.alpha = 0;
+        } else {
+            if ([strongSelf.backingSlider thumbImageForState:UIControlStateNormal])
+                [strongSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];
+        }
+    };
     [self.pop set:self.backingSlider.value completion:completion newColorsAndWidth:nil];
 }
 

@@ -22,16 +22,14 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
 
 -(NSAttributedString *) fitToFrame:(CGRect)frame newString:(NSString *)newStr newColor:(UIColor*)color prevFontSize:(CGFloat*)prevFontSize returnNewBounds:(CGRect*)bounds
 {
-    NSMutableAttributedString *outStr;
-    if (newStr) {
-        NSDictionary *dict = [self attributesAtIndex:0 effectiveRange:NULL];
-        outStr = [[NSMutableAttributedString alloc] initWithString:newStr attributes:dict];
-    } else
-        outStr = [self mutableCopy];
-    [outStr enumerateAttribute:(NSString *)kCTFontAttributeName inRange:NSMakeRange(0, outStr.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+    NSMutableAttributedString *outStr = [self mutableCopy];
+    [self enumerateAttribute:(NSString *)kCTFontAttributeName inRange:NSMakeRange(0, self.string.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
         if (value) {
-            //UIFont *newFont = (UIFont *)value;
-            CFStringRef fontNameRef = (CFStringRef)CFBridgingRetain([(UIFont *)value fontName]);
+            if (newStr) {
+                [[outStr mutableString ]replaceOccurrencesOfString:outStr.string withString:newStr options:NSCaseInsensitiveSearch range:range];
+                range = NSMakeRange(0, newStr.length);
+            }
+            CFStringRef fontNameRef = (__bridge CFStringRef)[(UIFont *)value fontName];
             CTFontRef newFontRef = CTFontCreateWithName(fontNameRef, [(UIFont *)value pointSize], NULL);
             CTFontRef prevFontRef = NULL;
             CGSize maxSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
@@ -47,7 +45,7 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
                     if (CGSizeContainsSize(frame.size, curBounds.size)) { //smaller
                         fromSmall = YES;
                         if (!fromBig)
-                            diff = CTFontGetSize(prevFontRef) / 2;
+                            diff = CTFontGetSize(prevFontRef);
                         else
                             diff /= 2;
                         CFRelease(newFontRef);
@@ -95,7 +93,6 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
                 } while (1);
             }
             *prevFontSize = CTFontGetSize(newFontRef);
-            CFRelease(fontNameRef);
             CFRelease(newFontRef);
             CFRelease(prevFontRef);
             if (color)
@@ -105,7 +102,7 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
             *stop = YES;
         }
     }];
-    return outStr;
+    return [outStr copy];
 }
 
 @end

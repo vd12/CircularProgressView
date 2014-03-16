@@ -91,6 +91,7 @@
                         <outlet property="buttonPress" destination="jf6-L6-K1a" id="wwh-6z-msm"/>
                         <outlet property="leftView" destination="veh-cs-2P3" id="5om-qK-3n8"/>
                         <outlet property="rightView" destination="efD-oO-j07" id="3sS-Aw-aJh"/>
+                        <outlet property="slider" destination="VKZ-58-O7V" id="0TX-Kx-lJ7"/>
                         <outlet property="volumeView" destination="dbj-X9-azh" id="NDm-tN-eJv"/>
                     </connections>
                 </viewController>

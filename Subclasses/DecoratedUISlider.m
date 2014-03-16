@@ -81,18 +81,20 @@
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
     DecoratedUISlider * __weak weakSelf = self;
     CircularProgressViewAnimatingCompletionBlock completion = ^{
-        DecoratedUISlider *strongSelf = weakSelf;
         //NSLog(@"Completion");
+        DecoratedUISlider *strongSelf = weakSelf;
         if (0 == strongSelf.pop.alpha) {
             strongSelf.pop.alpha = 1;
-            UIGraphicsBeginImageContextWithOptions(strongSelf.pop.layer.bounds.size, strongSelf.pop.layer.opaque, 0);
+            UIGraphicsBeginImageContext(strongSelf.pop.layer.bounds.size);
             [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             [strongSelf setThumbImage:img forState:UIControlStateNormal];
             strongSelf.pop.alpha = 0;
-        } else
-            [strongSelf setThumbImage:nil forState:UIControlStateNormal];
+        } else {
+            if ([strongSelf thumbImageForState:UIControlStateNormal])
+                [strongSelf setThumbImage:nil forState:UIControlStateNormal];
+        }
     };
     [self.pop set:self.value completion:completion newColorsAndWidth:nil];
 }
