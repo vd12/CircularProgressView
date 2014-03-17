@@ -103,7 +103,7 @@
     else if (self.backingSlider.value < self.backingSlider.minimumValue)
         self.backingSlider.value = self.backingSlider.minimumValue;
     ManageableVolumeView * __weak weakSelf = self;
-    CircularProgressViewAnimatingCompletionBlock completion = ^{
+    CircularProgressAnimatingCompletionBlock completion = ^{
         //NSLog(@"Completion");
         ManageableVolumeView *strongSelf = weakSelf;
         if (0 == strongSelf.pop.alpha) {
@@ -111,9 +111,9 @@
             UIGraphicsBeginImageContext(strongSelf.pop.layer.bounds.size);
             [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
             UIGraphicsEndImageContext();
             strongSelf.pop.alpha = 0;
+            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
         } else {
             if ([strongSelf.backingSlider thumbImageForState:UIControlStateNormal])
                 [strongSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];

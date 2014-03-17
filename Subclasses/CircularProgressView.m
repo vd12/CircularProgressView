@@ -18,7 +18,7 @@
     return self;
 }
 
--(id)initWithCoder:(NSCoder*)coder //up from storyboard
+- (id)initWithCoder:(NSCoder*)coder //up from storyboard
 {
     if ((self = [super initWithCoder:coder]))
         [self setup];
@@ -28,19 +28,19 @@
 - (void)setup
 {
     self.backgroundColor = [UIColor clearColor];
-    NSDictionary *dict = @{kCircularProgressViewBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1],
-                           kCircularProgressViewBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
-                           kCircularProgressViewAnimatingCircleColorKey: [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1],
-                           kCircularProgressViewTextColorKey: [UIColor blackColor/*colorWithRed:0. green:1. blue:22./255. alpha:1.*/],
-                           kCircularProgressViewBgroundCircleWidthKey: @(2),
-                           kCircularProgressViewAnimatingCircleWidthKey: @(3)};
-    [self.layer addCircularProgressViewWithMax:100 currentPosition:0 newPosition:0 animationDuration:0. repeat:NO frame:self.layer.bounds corners:NO colorsAndWidth:dict completion:nil];
+    NSDictionary *dict = @{kCircularProgressBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1],
+                           kCircularProgressBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
+                           kCircularProgressAnimatingCircleColorKey: [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1],
+                           kCircularProgressTextColorKey: [UIColor blackColor/*colorWithRed:0. green:1. blue:22./255. alpha:1.*/],
+                           kCircularProgressBgroundCircleWidthKey: @(2),
+                           kCircularProgressAnimatingCircleWidthKey: @(3)};
+    [self.layer addCircularProgressWithMax:100 currentPosition:0 newPosition:0 animationDuration:0. repeat:NO frame:self.layer.bounds corners:NO colorsAndWidth:dict completion:nil];
     
 }
 
-- (void)set:(float)value completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock newColorsAndWidth:(NSDictionary *)dict
+- (void)set:(float)value completion:(CircularProgressAnimatingCompletionBlock)completionBlock newColorsAndWidth:(NSDictionary *)dict
 {
-    [self.layer setCircularProgressViewCurrentPosition:(NSUInteger)(value * 100. + .5) newColorsAndWidth:dict animationDuration:0 repeat:NO completion:completionBlock];
+    [self.layer setCircularProgressCurrentPosition:(NSUInteger)(value * 100. + .5) newColorsAndWidth:dict animationDuration:0 repeat:NO completion:completionBlock];
 }
 
 - (void)show:(BOOL)show animated:(BOOL)animated duration:(NSTimeInterval)duration

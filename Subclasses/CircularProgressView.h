@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CALayer+CircularProgressView.h"
+#import "CALayer+CircularProgress.h"
 
 @interface CircularProgressView : UIView
 
-- (void)set:(float)value completion:(CircularProgressViewAnimatingCompletionBlock)completionBlock newColorsAndWidth:(NSDictionary *)dict;
+- (void)set:(float)value completion:(CircularProgressAnimatingCompletionBlock)completionBlock newColorsAndWidth:(NSDictionary *)dict;
 - (void)show:(BOOL)show animated:(BOOL)animated duration:(NSTimeInterval)duration;
 
 @end

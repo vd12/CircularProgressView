@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/NSAttributedString+FitToFrame.m"
-            timestampString = "416680837.862928"
+            timestampString = "416689361.144574"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "-fitToFrame:newString:newColor:prevFontSize:returnNewBounds:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/NSAttributedString+FitToFrame.m"
-            timestampString = "416680837.862928"
+            timestampString = "416689361.144574"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "-fitToFrame:newString:newColor:prevFontSize:returnNewBounds:"
             landmarkType = "5">
          </BreakpointContent>
@@ -41,13 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Categories/CALayer+CircularProgressView.m"
+            filePath = "Categories/CALayer+CircularProgress.m"
             timestampString = "416629654.395839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "254"
             endingLineNumber = "254"
-            landmarkName = "-animateCircularProgressView:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:"
+            landmarkName = "-animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Subclasses/DecoratedUISlider.m"
-            timestampString = "416647758.977137"
+            timestampString = "416693021.916338"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"

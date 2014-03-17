@@ -38,7 +38,7 @@
     [self update];
 }
 
--(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
     BOOL ret = [super beginTrackingWithTouch:touch withEvent:event];
     //NSLog(@"%s %d",__func__, ret);
@@ -49,7 +49,7 @@
     return ret;
 }
 
--(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
     //NSLog(@"%s",__func__);
     [super endTrackingWithTouch:touch withEvent:event];
@@ -80,7 +80,7 @@
     CGRect rect = [self getThumbRect];
     self.pop.frame = CGRectOffset(rect, 0, -(rect.size.height + 1));
     DecoratedUISlider * __weak weakSelf = self;
-    CircularProgressViewAnimatingCompletionBlock completion = ^{
+    CircularProgressAnimatingCompletionBlock completion = ^{
         //NSLog(@"Completion");
         DecoratedUISlider *strongSelf = weakSelf;
         if (0 == strongSelf.pop.alpha) {
@@ -89,8 +89,8 @@
             [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
             UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
-            [strongSelf setThumbImage:img forState:UIControlStateNormal];
             strongSelf.pop.alpha = 0;
+            [strongSelf setThumbImage:img forState:UIControlStateNormal];
         } else {
             if ([strongSelf thumbImageForState:UIControlStateNormal])
                 [strongSelf setThumbImage:nil forState:UIControlStateNormal];

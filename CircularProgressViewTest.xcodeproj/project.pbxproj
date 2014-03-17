@@ -10,7 +10,7 @@
 		F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25018CA81D60094794A /* Main_iPad.storyboard */; };
 		F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25218CA81D60094794A /* Main_iPhone.storyboard */; };
 		F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */; };
-		F54ADE7C18C992D30020A098 /* CALayer+CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */; };
+		F54ADE7C18C992D30020A098 /* CALayer+CircularProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7A18C992D30020A098 /* CALayer+CircularProgress.m */; };
 		F54ADE8818C993830020A098 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8718C993830020A098 /* AppDelegate.m */; };
 		F54ADE8B18C993980020A098 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8A18C993980020A098 /* ViewController.m */; };
 		F54ADE8F18C993AD0020A098 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8C18C993AD0020A098 /* main.m */; };
@@ -31,8 +31,8 @@
 		F515D25318CA81D60094794A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Test/Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		F54ADE7718C992D30020A098 /* NSAttributedString+FitToFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSAttributedString+FitToFrame.h"; path = "Categories/NSAttributedString+FitToFrame.h"; sourceTree = "<group>"; };
 		F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+FitToFrame.m"; path = "Categories/NSAttributedString+FitToFrame.m"; sourceTree = "<group>"; };
-		F54ADE7918C992D30020A098 /* CALayer+CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+CircularProgressView.h"; path = "Categories/CALayer+CircularProgressView.h"; sourceTree = "<group>"; };
-		F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+CircularProgressView.m"; path = "Categories/CALayer+CircularProgressView.m"; sourceTree = "<group>"; };
+		F54ADE7918C992D30020A098 /* CALayer+CircularProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+CircularProgress.h"; path = "Categories/CALayer+CircularProgress.h"; sourceTree = "<group>"; };
+		F54ADE7A18C992D30020A098 /* CALayer+CircularProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+CircularProgress.m"; path = "Categories/CALayer+CircularProgress.m"; sourceTree = "<group>"; };
 		F54ADE8618C993830020A098 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Test/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		F54ADE8718C993830020A098 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Test/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F54ADE8918C993980020A098 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Test/ViewController.h; sourceTree = SOURCE_ROOT; };
@@ -150,8 +150,8 @@
 			children = (
 				F54ADE7718C992D30020A098 /* NSAttributedString+FitToFrame.h */,
 				F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */,
-				F54ADE7918C992D30020A098 /* CALayer+CircularProgressView.h */,
-				F54ADE7A18C992D30020A098 /* CALayer+CircularProgressView.m */,
+				F54ADE7918C992D30020A098 /* CALayer+CircularProgress.h */,
+				F54ADE7A18C992D30020A098 /* CALayer+CircularProgress.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -228,7 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54ADE8B18C993980020A098 /* ViewController.m in Sources */,
-				F54ADE7C18C992D30020A098 /* CALayer+CircularProgressView.m in Sources */,
+				F54ADE7C18C992D30020A098 /* CALayer+CircularProgress.m in Sources */,
 				F5B2D07318D221BA000F5311 /* DecoratedUISlider.m in Sources */,
 				F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */,
 				F54ADE8F18C993AD0020A098 /* main.m in Sources */,
