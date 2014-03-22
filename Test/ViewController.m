@@ -11,6 +11,8 @@
 #import "ManageableVolumeView.h"
 #import "DecoratedUISlider.h"
 
+#import "AVFoundation/AVFoundation.h"
+
 @interface ViewController ()
 - (IBAction)pressButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPress;
@@ -18,20 +20,21 @@
 @property (weak, nonatomic) IBOutlet UIView *rightView;
 @property (weak, nonatomic) IBOutlet ManageableVolumeView *volumeView;
 @property (weak, nonatomic) IBOutlet DecoratedUISlider *slider;
+@property (weak, nonatomic) IBOutlet UIView *mVolumeViewPlaceHolder;
+@property (nonatomic) AVAudioPlayer *audioPlayer;
 @end
 
 @implementation ViewController
-
-- (void)viewDidAppear:(BOOL)animated
+-(void)viewDidLoad
 {
     NSDictionary *dict = @{kCircularProgressBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.],
-                             kCircularProgressBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
-                             kCircularProgressAnimatingCircleColorKey: [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1.],
-                             kCircularProgressTextColorKey: [UIColor redColor],
-                             kCircularProgressBgroundCircleWidthKey: @(1),
-                             kCircularProgressAnimatingCircleWidthKey: @(4)};
+                           kCircularProgressBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
+                           kCircularProgressAnimatingCircleColorKey: [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1.],
+                           kCircularProgressTextColorKey: [UIColor redColor],
+                           kCircularProgressBgroundCircleWidthKey: @(1),
+                           kCircularProgressAnimatingCircleWidthKey: @(4)};
     BOOL ret =
-        [self.leftView.layer addCircularProgressWithMax:59 currentPosition:0 newPosition:59 animationDuration:60. repeat:YES frame:self.leftView.bounds corners:YES colorsAndWidth:dict completion:nil];
+    [self.leftView.layer addCircularProgressWithMax:59 currentPosition:0 newPosition:59 animationDuration:60. repeat:YES frame:self.leftView.bounds corners:YES colorsAndWidth:dict completion:nil];
     NSLog(@"%s %d,", __func__, ret);
     
     ret = [self.rightView.layer addCircularProgressWithMax:59 currentPosition:59 newPosition:0 animationDuration:60. repeat:YES frame:self.rightView.bounds corners:NO colorsAndWidth:dict completion:nil];
@@ -40,6 +43,16 @@
     self.volumeView.maximumValue = .75;
     self.volumeView.value = .7;
     self.slider.value = 1.;
+    
+    NSError *error = nil;
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"silencio" ofType:@"mp3"]] error:&error];
+    [self.audioPlayer prepareToPlay];
+    self.audioPlayer.numberOfLoops = -1;
+    [self.audioPlayer play];
+
+    self.mVolumeViewPlaceHolder.backgroundColor = [UIColor clearColor];
+    ManageableVolumeView *mVolumeView = [[ManageableVolumeView alloc] initWithFrame: self.mVolumeViewPlaceHolder.bounds];
+    [self.mVolumeViewPlaceHolder addSubview: mVolumeView];
 }
 
 - (IBAction)pressButton:(UIButton*)sender

@@ -6,7 +6,7 @@
          contextName = "GLOBAL">
          <PersistentStrings>
             <PersistentString
-               value = "shapeLayer.frame">
+               value = "txtLayer.bounds">
             </PersistentString>
             <PersistentString
                value = "txtLayer.string">
@@ -18,16 +18,16 @@
                value = "count">
             </PersistentString>
             <PersistentString
-               value = "shapeLayer.bounds">
+               value = "newBounds">
             </PersistentString>
             <PersistentString
-               value = "newBounds">
+               value = "shapeLayer.bounds">
             </PersistentString>
             <PersistentString
                value = "diff">
             </PersistentString>
             <PersistentString
-               value = "txtLayer.bounds">
+               value = "shapeLayer.frame">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -36,6 +36,14 @@
          <PersistentStrings>
             <PersistentString
                value = "*bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__137-[CALayer(CircularProgress) animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:]_block_invoke121:CALayer+CircularProgress.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "valuesStr[i]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -123,13 +131,13 @@
          contextName = "-[UIView(GoalKeeper) addGoalKeeperWithGoal:currentPosition:animationDuration:repeat:frame:corners:colors:]:UIView+GoalKeeper.m">
          <PersistentStrings>
             <PersistentString
+               value = "txtLayer.frame">
+            </PersistentString>
+            <PersistentString
                value = "txtLayer.bounds">
             </PersistentString>
             <PersistentString
                value = "txtLayer.string">
-            </PersistentString>
-            <PersistentString
-               value = "txtLayer.frame">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25018CA81D60094794A /* Main_iPad.storyboard */; };
 		F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515D25218CA81D60094794A /* Main_iPhone.storyboard */; };
+		F539DA6318DDF3C100D21920 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F539DA6218DDF3C100D21920 /* AVFoundation.framework */; };
 		F54ADE7B18C992D30020A098 /* NSAttributedString+FitToFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */; };
 		F54ADE7C18C992D30020A098 /* CALayer+CircularProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE7A18C992D30020A098 /* CALayer+CircularProgress.m */; };
 		F54ADE8818C993830020A098 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F54ADE8718C993830020A098 /* AppDelegate.m */; };
@@ -20,15 +21,16 @@
 		F596E62218A80D5B00EB2555 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62118A80D5B00EB2555 /* CoreGraphics.framework */; };
 		F596E62418A80D5B00EB2555 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F596E62318A80D5B00EB2555 /* UIKit.framework */; };
 		F5AAEF6B18CF81F8000CF6F8 /* ManageableVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */; };
-		F5AAEF6D18CF829E000CF6F8 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */; };
 		F5AFC8EA18BE8DAB00438CD1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */; };
 		F5B2D07018D21F0F000F5311 /* CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D06F18D21F0F000F5311 /* CircularProgressView.m */; };
 		F5B2D07318D221BA000F5311 /* DecoratedUISlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D07218D221BA000F5311 /* DecoratedUISlider.m */; };
+		F5DC812618DB55ED000BDF1F /* silencio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5DC812518DB55ED000BDF1F /* silencio.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F515D25118CA81D60094794A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Test/Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		F515D25318CA81D60094794A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Test/Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		F539DA6218DDF3C100D21920 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F54ADE7718C992D30020A098 /* NSAttributedString+FitToFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSAttributedString+FitToFrame.h"; path = "Categories/NSAttributedString+FitToFrame.h"; sourceTree = "<group>"; };
 		F54ADE7818C992D30020A098 /* NSAttributedString+FitToFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+FitToFrame.m"; path = "Categories/NSAttributedString+FitToFrame.m"; sourceTree = "<group>"; };
 		F54ADE7918C992D30020A098 /* CALayer+CircularProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+CircularProgress.h"; path = "Categories/CALayer+CircularProgress.h"; sourceTree = "<group>"; };
@@ -48,12 +50,12 @@
 		F596E62318A80D5B00EB2555 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F5AAEF6918CF81F8000CF6F8 /* ManageableVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ManageableVolumeView.h; path = Subclasses/ManageableVolumeView.h; sourceTree = "<group>"; };
 		F5AAEF6A18CF81F8000CF6F8 /* ManageableVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ManageableVolumeView.m; path = Subclasses/ManageableVolumeView.m; sourceTree = "<group>"; };
-		F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F5B2D06E18D21F0F000F5311 /* CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircularProgressView.h; path = Subclasses/CircularProgressView.h; sourceTree = "<group>"; };
 		F5B2D06F18D21F0F000F5311 /* CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircularProgressView.m; path = Subclasses/CircularProgressView.m; sourceTree = "<group>"; };
 		F5B2D07118D221BA000F5311 /* DecoratedUISlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoratedUISlider.h; path = Subclasses/DecoratedUISlider.h; sourceTree = "<group>"; };
 		F5B2D07218D221BA000F5311 /* DecoratedUISlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DecoratedUISlider.m; path = Subclasses/DecoratedUISlider.m; sourceTree = "<group>"; };
+		F5DC812518DB55ED000BDF1F /* silencio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silencio.mp3; sourceTree = "<group>"; };
 		F5FF9B8918A8DD58007B21AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -62,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5AAEF6D18CF829E000CF6F8 /* MediaPlayer.framework in Frameworks */,
+				F539DA6318DDF3C100D21920 /* AVFoundation.framework in Frameworks */,
 				F5AFC8EA18BE8DAB00438CD1 /* CoreText.framework in Frameworks */,
 				F596E62218A80D5B00EB2555 /* CoreGraphics.framework in Frameworks */,
 				F596E62418A80D5B00EB2555 /* UIKit.framework in Frameworks */,
@@ -76,6 +78,7 @@
 		F596E61318A80D5B00EB2555 = {
 			isa = PBXGroup;
 			children = (
+				F5DC812518DB55ED000BDF1F /* silencio.mp3 */,
 				F5AAEF6818CF8183000CF6F8 /* Subclasses */,
 				F515D25018CA81D60094794A /* Main_iPad.storyboard */,
 				F515D25218CA81D60094794A /* Main_iPhone.storyboard */,
@@ -97,7 +100,7 @@
 		F596E61E18A80D5B00EB2555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F5AAEF6C18CF829E000CF6F8 /* MediaPlayer.framework */,
+				F539DA6218DDF3C100D21920 /* AVFoundation.framework */,
 				F5AFC8E918BE8DAB00438CD1 /* CoreText.framework */,
 				F5FF9B8918A8DD58007B21AC /* QuartzCore.framework */,
 				F596E61F18A80D5B00EB2555 /* Foundation.framework */,
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F515D25418CA81D60094794A /* Main_iPad.storyboard in Resources */,
+				F5DC812618DB55ED000BDF1F /* silencio.mp3 in Resources */,
 				F515D25518CA81D60094794A /* Main_iPhone.storyboard in Resources */,
 				F54ADE9318C993E10020A098 /* InfoPlist.strings in Resources */,
 				F54ADE9B18C994120020A098 /* Images.xcassets in Resources */,

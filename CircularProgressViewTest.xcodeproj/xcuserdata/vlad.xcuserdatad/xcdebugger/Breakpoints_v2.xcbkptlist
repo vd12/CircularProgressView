@@ -41,22 +41,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Categories/CALayer+CircularProgress.m"
-            timestampString = "416629654.395839"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
-            landmarkName = "-animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Subclasses/DecoratedUISlider.m"
             timestampString = "416647713.739219"
             startingColumnNumber = "9223372036854775807"
@@ -80,6 +64,22 @@
             startingLineNumber = "91"
             endingLineNumber = "91"
             landmarkName = "-update"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Categories/CALayer+CircularProgress.m"
+            timestampString = "417042419.072381"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "-animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

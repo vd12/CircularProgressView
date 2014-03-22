@@ -63,21 +63,32 @@
                                     <constraint firstAttribute="height" constant="50" id="tbG-Nw-R5W"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sLC-3L-Omi">
+                                <rect key="frame" x="20" y="611" width="728" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="Urs-xd-3x0"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="jf6-L6-K1a" firstAttribute="top" secondItem="VKZ-58-O7V" secondAttribute="bottom" constant="30" id="10J-o9-ckk"/>
+                            <constraint firstAttribute="trailing" secondItem="sLC-3L-Omi" secondAttribute="trailing" constant="20" id="6Vn-B1-xr3"/>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="JTx-2F-i1W"/>
                             <constraint firstAttribute="centerX" secondItem="jf6-L6-K1a" secondAttribute="centerX" id="JVo-sU-Ewn"/>
                             <constraint firstItem="VKZ-58-O7V" firstAttribute="top" secondItem="dbj-X9-azh" secondAttribute="bottom" constant="47" id="V0I-uL-XXY"/>
                             <constraint firstAttribute="trailing" secondItem="dbj-X9-azh" secondAttribute="trailing" constant="20" id="csb-Md-OOP"/>
+                            <constraint firstItem="sLC-3L-Omi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="gtZ-GC-AOM"/>
                             <constraint firstItem="veh-cs-2P3" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="ibt-DT-a9H"/>
                             <constraint firstItem="dbj-X9-azh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="k5v-wb-9e3"/>
                             <constraint firstItem="dbj-X9-azh" firstAttribute="top" secondItem="veh-cs-2P3" secondAttribute="bottom" constant="175" id="mIU-lX-kLE"/>
                             <constraint firstItem="VKZ-58-O7V" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="pla-6b-M6A"/>
                             <constraint firstAttribute="trailing" secondItem="efD-oO-j07" secondAttribute="trailing" constant="20" id="rvw-16-Tjy"/>
                             <constraint firstAttribute="trailing" secondItem="VKZ-58-O7V" secondAttribute="trailing" constant="20" id="v3X-1z-s9e"/>
+                            <constraint firstItem="sLC-3L-Omi" firstAttribute="top" secondItem="jf6-L6-K1a" secondAttribute="bottom" constant="40" id="vl0-Cw-ArU"/>
                             <constraint firstItem="efD-oO-j07" firstAttribute="top" secondItem="0n3-6C-rNV" secondAttribute="bottom" id="yag-OS-IaH"/>
                         </constraints>
                         <connections>
@@ -90,6 +101,7 @@
                     <connections>
                         <outlet property="buttonPress" destination="jf6-L6-K1a" id="wwh-6z-msm"/>
                         <outlet property="leftView" destination="veh-cs-2P3" id="5om-qK-3n8"/>
+                        <outlet property="mVolumeViewPlaceHolder" destination="sLC-3L-Omi" id="6R8-DZ-Gky"/>
                         <outlet property="rightView" destination="efD-oO-j07" id="3sS-Aw-aJh"/>
                         <outlet property="slider" destination="VKZ-58-O7V" id="0TX-Kx-lJ7"/>
                         <outlet property="volumeView" destination="dbj-X9-azh" id="NDm-tN-eJv"/>

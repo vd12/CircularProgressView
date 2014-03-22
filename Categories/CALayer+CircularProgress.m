@@ -191,14 +191,11 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
         [CATransaction commit];
         return YES;
     }
-    NSUInteger cur = current;
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
     //txt & txt bounds
     BOOL inc = (newCurrent >= current) ? YES : NO;
     NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
     NSUInteger step = 1;
-    CGRect newBounds;
-    CGFloat fontSize = 0;
     if (0. == duration) {
         step = steps;
         steps = 0;
@@ -215,10 +212,12 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     }
     NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
     NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
-    valuesStr[0] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-    valuesBounds[0] = [NSValue valueWithCGRect:newBounds];
-    NSUInteger i;
-    for (i = 1; i < steps; i++) {
+    CGRect newBounds;
+    CGFloat fontSize = 0;
+    NSUInteger i = 0, cur = current;
+    valuesStr[i] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+    valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+    while (++i < steps) {
         valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
         valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
         if (inc)
@@ -228,6 +227,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     }
     valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
     valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+    
     CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
     txtAnimation.values = valuesStr;
     txtAnimation.duration = duration;
@@ -252,6 +252,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     pathAnimation.fillMode = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
     [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
+    
     [CATransaction commit];
     return YES;
 }

@@ -72,6 +72,7 @@
 		}
     }
     if (self.backingSlider) {
+        [self.backingSlider sizeToFit];
         self.pop = [[CircularProgressView alloc] initWithFrame:[self getThumbRect]];
         self.pop.alpha = 0;
         [self.backingSlider addSubview:self.pop];
@@ -92,6 +93,7 @@
 - (void) setValue:(float)value
 {
     self.backingSlider.value = value;
+    [self update];
 }
 
 - (void)update
