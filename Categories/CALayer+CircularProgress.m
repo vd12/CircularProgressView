@@ -158,6 +158,13 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     [ self removeCircularProgressAnimations];
     if (!shapeLayer || current > max || newCurrent > max) //sanity check
         return NO;
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        if (completionBlock) {
+            [ self removeCircularProgressAnimations];
+            completionBlock();
+        }
+    }];
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
 
@@ -181,12 +188,6 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
             force = YES;
         }
     }
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [ self removeCircularProgressAnimations];
-        if(completionBlock)
-            completionBlock();
-    }];
     if (current == newCurrent && !force) {
         [CATransaction commit];
         return YES;
