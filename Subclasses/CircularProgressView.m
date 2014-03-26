@@ -8,6 +8,8 @@
 
 #import "CircularProgressView.h"
 
+static int const kMaxNumber = 11;
+
 @implementation CircularProgressView
 
 - (id)initWithFrame:(CGRect)frame
@@ -34,13 +36,13 @@
                            kCircularProgressTextColorKey: [UIColor blackColor/*colorWithRed:0. green:1. blue:22./255. alpha:1.*/],
                            kCircularProgressBgroundCircleWidthKey: @(2),
                            kCircularProgressAnimatingCircleWidthKey: @(3)};
-    [self.layer addCircularProgressWithMax:100 currentPosition:0 newPosition:0 animationDuration:0. repeat:NO frame:self.layer.bounds corners:NO colorsAndWidth:dict completion:nil];
+    [self.layer addCircularProgressWithMax:kMaxNumber currentPosition:0 newPosition:0 animationDuration:0. repeat:NO frame:self.layer.bounds corners:NO colorsAndWidth:dict completion:nil];
     
 }
 
 - (void)set:(float)value completion:(CircularProgressAnimatingCompletionBlock)completionBlock newColorsAndWidth:(NSDictionary *)dict
 {
-    [self.layer setCircularProgressCurrentPosition:(NSUInteger)(value * 100. + .5) newColorsAndWidth:dict animationDuration:0 repeat:NO completion:completionBlock];
+    [self.layer setCircularProgressCurrentPosition:(NSUInteger)(value * kMaxNumber + .5) newColorsAndWidth:dict animationDuration:0 repeat:NO completion:completionBlock];
 }
 
 - (void)show:(BOOL)show animated:(BOOL)animated duration:(NSTimeInterval)duration
