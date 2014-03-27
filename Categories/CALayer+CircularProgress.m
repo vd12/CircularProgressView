@@ -97,7 +97,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     txtLayer.contentsGravity = kCAGravityBottom;
 
     //need to caclulate frame for goal-1 first because it is widest themn we roll to current
-    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville"
+    CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
     
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
@@ -155,9 +155,10 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
 
 - (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat force:(BOOL)force completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    [ self removeCircularProgressAnimations];
     if (!shapeLayer || current > max || newCurrent > max) //sanity check
         return NO;
+    if (current == newCurrent && !force)
+        return YES;
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         if (completionBlock) {
@@ -165,6 +166,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
             completionBlock();
         }
     }];
+    [ self removeCircularProgressAnimations];
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
 
@@ -187,10 +189,6 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
             txtLayer.foregroundColor = txtColor.CGColor;
             force = YES;
         }
-    }
-    if (current == newCurrent && !force) {
-        [CATransaction commit];
-        return YES;
     }
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
     //txt & txt bounds
