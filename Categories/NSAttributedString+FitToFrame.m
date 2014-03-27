@@ -79,14 +79,14 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
                             CFRelease(prevFontRef);
                         prevFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(newFontRef), NULL);
                         CFRelease(newFontRef);
-                        newFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(prevFontRef) + 1 , NULL);
+                        newFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(prevFontRef) + .5 , NULL);
                     } else { //bigger
                         fromBig = YES;
                         if (prevFontRef)
                             CFRelease(prevFontRef);
                         prevFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(newFontRef), NULL);
                         CFRelease(newFontRef);
-                        newFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(prevFontRef) - 1 , NULL);
+                        newFontRef = CTFontCreateWithName(fontNameRef, CTFontGetSize(prevFontRef) - .5 , NULL);
                     }
                     [outStr addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)newFontRef range:range];
                     curBounds = [outStr boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil];

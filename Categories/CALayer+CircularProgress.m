@@ -22,7 +22,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
 
 - (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary*)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    [ self removeCircularProgressAnimations];
+    [ self removeCircularProgress]; // dont add it twice!!!                                                                                                                     
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
     UIColor *bgroundColor = [dict objectForKey:kCircularProgressBgroundColorKey];
@@ -43,6 +43,10 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     NSNumber *animatingCircleWidth = [dict objectForKey:kCircularProgressAnimatingCircleWidthKey];
     if (!animatingCircleWidth)
         animatingCircleWidth = @(8);
+    CGFloat inset = MAX([bgroundCircleWidth floatValue], [animatingCircleWidth floatValue]) / 4;
+    int space = MIN(CGRectGetWidth(frame), CGRectGetHeight(frame)) - inset * 2;
+    if (space < 20)  //sanity check
+        return NO;
     [self removeCircularProgress];
 
     CAShapeLayer *shapeLayer;
@@ -60,10 +64,9 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     shapeLayer.frame = frame;
     CGFloat sqSize = MIN(CGRectGetWidth(shapeLayer.bounds), CGRectGetHeight(shapeLayer.bounds));
     CGRect bounds = CGRectMake((CGRectGetWidth(shapeLayer.bounds) - sqSize) / 2., (CGRectGetHeight(shapeLayer.bounds) - sqSize) / 2., sqSize, sqSize);
-    CGFloat inset = ([animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue]) / 2.;
     shapeLayer.bounds = CGRectInset(bounds, inset, inset);
     CGPoint center = CGPointMake( shapeLayer.bounds.origin.x + CGRectGetWidth(shapeLayer.bounds) / 2., shapeLayer.bounds.origin.y + CGRectGetHeight(shapeLayer.bounds) / 2.);
-    inset = [bgroundCircleWidth floatValue] / 2.;
+    inset = [bgroundCircleWidth floatValue] / 4;
     bounds = CGRectInset(shapeLayer.bounds, inset, inset);
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter: center radius:bounds.size.height / 2. startAngle:-M_PI_2 endAngle:M_PI+M_PI_2 clockwise:YES];
     shapeLayer.path = path.CGPath;
@@ -88,7 +91,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     CATextLayer *txtLayer = [CATextLayer layer];
     txtLayer.zPosition = CGFLOAT_MAX;
     CGFloat sqSize1 = (( sqSize - [animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue] ) / 2.) * M_SQRT2;
-    inset = (sqSize - sqSize1) / 2.;
+    inset = (sqSize - sqSize1) / 2;
     txtLayer.frame = CGRectInset(shapeLayer.bounds, inset, inset);
     txtLayer.backgroundColor = bgroundColor.CGColor; //animatingCircleColor.CGColor;
     txtLayer.foregroundColor = textColor.CGColor;
@@ -112,7 +115,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     
     [self addSublayer:shapeLayer];
     
-    return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat force:YES completion:completionBlock];
+    return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat completion:completionBlock];
 }
 
 - (void)removeCircularProgress
@@ -127,7 +130,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     NSUInteger max, current;
     CAShapeLayer *shapeLayer;
     if ((shapeLayer = [self getCircularProgressMax:&max andCurrent:&current]))
-        return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat force:NO completion:completionBlock];
+        return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat completion:completionBlock];
     else
         return NO;
 }
@@ -153,12 +156,10 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
         [layer removeAllAnimations];
 }
 
-- (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat force:(BOOL)force completion:(CircularProgressAnimatingCompletionBlock)completionBlock
+- (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
     if (!shapeLayer || current > max || newCurrent > max) //sanity check
         return NO;
-    if (current == newCurrent && !force)
-        return YES;
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         if (completionBlock) {
@@ -185,10 +186,8 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
         sliderLayer.strokeColor = animatingCircleColor.CGColor;
     UIColor *txtColor = [colors objectForKey:kCircularProgressTextColorKey];
     if (txtColor) {
-        if (!CGColorEqualToColor(txtLayer.foregroundColor, txtColor.CGColor)) {
+        if (!CGColorEqualToColor(txtLayer.foregroundColor, txtColor.CGColor))
             txtLayer.foregroundColor = txtColor.CGColor;
-            force = YES;
-        }
     }
     txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
     //txt & txt bounds

@@ -74,12 +74,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Categories/CALayer+CircularProgress.m"
-            timestampString = "417581353.258966"
+            timestampString = "417590776.607535"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
-            landmarkName = "-animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:force:completion:"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "-animateCircularProgress:max:currentPosition:newPosition:newColors:animationDuration:repeat:completion:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Categories/CALayer+CircularProgress.m"
+            timestampString = "417590082.34433"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "-addCircularProgressWithMax:currentPosition:newPosition:animationDuration:repeat:frame:corners:colorsAndWidth:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
