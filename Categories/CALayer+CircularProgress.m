@@ -118,6 +118,14 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat completion:completionBlock];
 }
 
+- (BOOL)findCircularProgress
+{
+    if ([self findCircularProgressShapelayer:kCircularProgressShapeLayerName]) //progressshapelayer only, background layer may not exist
+        return YES;
+    else
+        return NO;
+}
+
 - (void)removeCircularProgress
 {
     [ self removeCircularProgressAnimations];
@@ -160,10 +168,11 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
 {
     if (!shapeLayer || current > max || newCurrent > max) //sanity check
         return NO;
+    [CATransaction lock];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         if (completionBlock) {
-            [ self removeCircularProgressAnimations];
+            //[ self removeCircularProgressAnimations];
             completionBlock();
         }
     }];
@@ -251,7 +260,10 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     pathAnimation.removedOnCompletion = NO;
     [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
     
+    [CATransaction flush];
     [CATransaction commit];
+    [CATransaction flush];
+    [CATransaction unlock];
     return YES;
 }
 
