@@ -25,22 +25,22 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     [ self removeCircularProgress]; // dont add it twice!!!                                                                                                                     
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
-    UIColor *bgroundColor = [dict objectForKey:kCircularProgressBgroundColorKey];
+    UIColor *bgroundColor = dict[kCircularProgressBgroundColorKey];
     if (!bgroundColor)
         bgroundColor = [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.];
-    UIColor *bgroundCircleColor = [dict objectForKey:kCircularProgressBgroundCircleColorKey];
+    UIColor *bgroundCircleColor = dict[kCircularProgressBgroundCircleColorKey];
     if (!bgroundCircleColor)
         bgroundCircleColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:1.];
-    UIColor *animatingCircleColor = [dict objectForKey:kCircularProgressAnimatingCircleColorKey];
+    UIColor *animatingCircleColor = dict[kCircularProgressAnimatingCircleColorKey];
     if (!animatingCircleColor)
         animatingCircleColor = [UIColor colorWithRed:0. green:1. blue:22./255. alpha:1.];
-    UIColor *textColor = [dict objectForKey:kCircularProgressTextColorKey];
+    UIColor *textColor = dict[kCircularProgressTextColorKey];
     if (!textColor)
         textColor = [UIColor blackColor];
-    NSNumber *bgroundCircleWidth = [dict objectForKey:kCircularProgressBgroundCircleWidthKey];
+    NSNumber *bgroundCircleWidth = dict[kCircularProgressBgroundCircleWidthKey];
     if (!bgroundCircleWidth)
         bgroundCircleWidth = @(2); // default;
-    NSNumber *animatingCircleWidth = [dict objectForKey:kCircularProgressAnimatingCircleWidthKey];
+    NSNumber *animatingCircleWidth = dict[kCircularProgressAnimatingCircleWidthKey];
     if (!animatingCircleWidth)
         animatingCircleWidth = @(8);
     CGFloat inset = MAX([bgroundCircleWidth floatValue], [animatingCircleWidth floatValue]) / 4;
@@ -180,20 +180,20 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
 
-    UIColor *bgroundColor = [colors objectForKey:kCircularProgressBgroundColorKey];
+    UIColor *bgroundColor = colors[kCircularProgressBgroundColorKey];
     if (bgroundColor) {
         [self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName].backgroundColor = bgroundColor.CGColor;
         shapeLayer.fillColor = bgroundColor.CGColor;
         sliderLayer.fillColor = bgroundColor.CGColor;
         txtLayer.backgroundColor = bgroundColor.CGColor;
     }
-    UIColor *bgroundCircleColor = [colors objectForKey:kCircularProgressBgroundCircleColorKey];
+    UIColor *bgroundCircleColor = colors[kCircularProgressBgroundCircleColorKey];
     if (bgroundCircleColor)
         shapeLayer.strokeColor = bgroundCircleColor.CGColor;
-    UIColor *animatingCircleColor = [colors objectForKey:kCircularProgressAnimatingCircleColorKey];
+    UIColor *animatingCircleColor = colors[kCircularProgressAnimatingCircleColorKey];
     if (animatingCircleColor)
         sliderLayer.strokeColor = animatingCircleColor.CGColor;
-    UIColor *txtColor = [colors objectForKey:kCircularProgressTextColorKey];
+    UIColor *txtColor = colors[kCircularProgressTextColorKey];
     if (txtColor) {
         if (!CGColorEqualToColor(txtLayer.foregroundColor, txtColor.CGColor))
             txtLayer.foregroundColor = txtColor.CGColor;
