@@ -17,12 +17,15 @@
 static NSString *kCircularProgressShapeLayerName = @"CircularProgress";
 static NSString *kCircularProgressBgroundShapeLayerName = @"CircularProgressBground";
 static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
+static int const kCircularProgressSavedParams = 7;
+static NSString *kCircularProgressSaveParamsFormat = @"%tu,%tu;%f,%f,%f,%f;%f";
+static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%lf;%lf";
 
 #pragma mark public instance methods
 
-- (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary*)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock
+- (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary *)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    [ self removeCircularProgress]; // dont add it twice!!!                                                                                                                     
+    [self removeCircularProgress]; // dont add it twice!!!                                                                                                                     
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
     UIColor *bgroundColor = dict[kCircularProgressBgroundColorKey];
@@ -95,7 +98,8 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     txtLayer.frame = CGRectInset(shapeLayer.bounds, inset, inset);
     txtLayer.backgroundColor = bgroundColor.CGColor; //animatingCircleColor.CGColor;
     txtLayer.foregroundColor = textColor.CGColor;
-    txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, current]; //[@(current) stringValue];
+    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, current,
+                     txtLayer.frame.origin.x, txtLayer.frame.origin.y, txtLayer.frame.size.width, txtLayer.frame.size.height, 0.]; //[@(current) stringValue];
     txtLayer.alignmentMode = kCAAlignmentCenter;
     txtLayer.contentsGravity = kCAGravityBottom;
 
@@ -115,7 +119,7 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     
     [self addSublayer:shapeLayer];
     
-    return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat completion:completionBlock];
+    return [self animateCircularProgress:shapeLayer newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat completion:completionBlock];
 }
 
 - (BOOL)findCircularProgress
@@ -133,14 +137,9 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
     [[self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName] removeFromSuperlayer];
 }
 
-- (BOOL)setCircularProgressCurrentPosition:(NSUInteger)newCurrent newColorsAndWidth:(NSDictionary*)dict animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
+- (BOOL)setCircularProgressCurrentPosition:(NSUInteger)newCurrent newColorsAndWidth:(NSDictionary *)dict animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    NSUInteger max, current;
-    CAShapeLayer *shapeLayer;
-    if ((shapeLayer = [self getCircularProgressMax:&max andCurrent:&current]))
-        return [self animateCircularProgress:shapeLayer max:max currentPosition:current newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat completion:completionBlock];
-    else
-        return NO;
+    return [self animateCircularProgress:[self findCircularProgressShapelayer:kCircularProgressShapeLayerName] newPosition:newCurrent newColors:dict animationDuration:duration repeat:repeat completion:completionBlock];
 }
 
 - (CAShapeLayer *)getCircularProgressMax:(NSUInteger *)max andCurrent:(NSUInteger *)current
@@ -160,26 +159,30 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
 - (void)removeCircularProgressAnimations
 {
     [self removeAllAnimations];
-    for (CALayer* layer in [self sublayers])
+    for (CALayer* layer in [self sublayers]) {
+        [CATransaction begin];
         [layer removeAllAnimations];
+        [CATransaction flush];
+        [CATransaction commit];
+        [CATransaction flush];
+    }
 }
 
-- (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer max:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newCurrent newColors:(NSDictionary*)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
+- (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer newPosition:(NSUInteger)newCurrent newColors:(NSDictionary *)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    if (!shapeLayer || current > max || newCurrent > max) //sanity check
+    if (!shapeLayer) //sanity check
         return NO;
-    [CATransaction lock];
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        if (completionBlock) {
-            //[ self removeCircularProgressAnimations];
-            completionBlock();
-        }
-    }];
-    [ self removeCircularProgressAnimations];
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
-    CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
+    NSUInteger max, current;
+    double x, y, width, height, fSize;
+    if (sscanf([txtLayer.name cStringUsingEncoding:NSUTF8StringEncoding], kCircularProgressSscanfParamsFormat, &max, &current, &x, &y, &width, &height, &fSize) != kCircularProgressSavedParams )
+        return NO;
+    CGRect frame = CGRectMake(x, y, width, height);
+    CGFloat fontSize = fSize;
+    if (current > max || newCurrent > max || CGRectIsEmpty(frame)) //sanity check
+        return NO;
 
+    CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
     UIColor *bgroundColor = colors[kCircularProgressBgroundColorKey];
     if (bgroundColor) {
         [self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName].backgroundColor = bgroundColor.CGColor;
@@ -198,76 +201,92 @@ static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
         if (!CGColorEqualToColor(txtLayer.foregroundColor, txtColor.CGColor))
             txtLayer.foregroundColor = txtColor.CGColor;
     }
-    txtLayer.name = [NSString stringWithFormat:@"%tu,%tu", max, newCurrent];
-    //txt & txt bounds
-    BOOL inc = (newCurrent >= current) ? YES : NO;
-    NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
-    NSUInteger step = 1;
+    CGRect newBounds;
     if (0. == duration) {
-        step = steps;
-        steps = 0;
+        txtLayer.string = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+        txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
+        txtLayer.bounds = newBounds;
+        sliderLayer.strokeEnd = ((CGFloat)newCurrent) / max;
+        if (completionBlock) {
+            [ self removeCircularProgressAnimations];
+            dispatch_async(dispatch_get_main_queue(),completionBlock);//completionBlock();
+        }
+        return YES;
     } else {
+        [CATransaction lock];
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            if (completionBlock) {
+                [ self removeCircularProgressAnimations];
+                completionBlock();
+            }
+        }];
+        [ self removeCircularProgressAnimations];
+        
+        //txt & txt bounds
+        BOOL inc = (newCurrent >= current) ? YES : NO;
+        NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
+        NSUInteger step = 1;
         CGFloat curFps30 = steps / duration / 30.;
         if (curFps30 > 1.) {// > 30FPS?
             step *= curFps30;
             steps /= step;
         }
-    }
-    if (steps > kCircularProgressKeyFrameLimit) {
-        step *= steps / kCircularProgressKeyFrameLimit;
-        steps = kCircularProgressKeyFrameLimit;
-    }
-    NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
-    NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
-    CGRect newBounds;
-    CGFloat fontSize = 0;
-    NSUInteger i = 0, cur = current;
-    valuesStr[i] =  [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-    valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-    while (++i < steps) {
-        valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+        if (steps > kCircularProgressKeyFrameLimit) {
+            step *= steps / kCircularProgressKeyFrameLimit;
+            steps = kCircularProgressKeyFrameLimit;
+        }
+        NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
+        NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
+        NSUInteger i = 0, cur = current;
+        valuesStr[i] =  [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+        txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
         valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-        if (inc)
-            cur += step;
-        else
-            cur -= step;
+        while (++i < steps) {
+            valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+            valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+            if (inc)
+                cur += step;
+            else
+                cur -= step;
+        }
+        valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+        valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+        
+        CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
+        txtAnimation.values = valuesStr;
+        txtAnimation.duration = duration;
+        txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+        txtAnimation.fillMode = kCAFillModeForwards;
+        txtAnimation.removedOnCompletion = NO;
+        [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
+        //txt bounds
+        CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
+        boundsAnimation.values = valuesBounds;
+        boundsAnimation.duration = duration;
+        boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+        boundsAnimation.fillMode = kCAFillModeForwards;
+        boundsAnimation.removedOnCompletion = NO;
+        [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
+        //slider
+        CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        pathAnimation.duration = duration;
+        pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+        pathAnimation.fromValue = @(((CGFloat)current) / max);
+        pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
+        pathAnimation.fillMode = kCAFillModeForwards;
+        pathAnimation.removedOnCompletion = NO;
+        [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
+        
+        [CATransaction flush];
+        [CATransaction commit];
+        [CATransaction flush];
+        [CATransaction unlock];
     }
-    valuesStr[i] = [txtLayer.string fitToFrame:txtLayer.frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-    valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-    
-    CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
-    txtAnimation.values = valuesStr;
-    txtAnimation.duration = duration;
-    txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    txtAnimation.fillMode = kCAFillModeForwards;
-    txtAnimation.removedOnCompletion = NO;
-    [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
-    //txt bounds
-    CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
-    boundsAnimation.values = valuesBounds;
-    boundsAnimation.duration = duration;
-    boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    boundsAnimation.fillMode = kCAFillModeForwards;
-    boundsAnimation.removedOnCompletion = NO;
-    [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
-    //slider
-    CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    pathAnimation.duration = duration;
-    pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    pathAnimation.fromValue = @(((CGFloat)current) / max);
-    pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
-    pathAnimation.fillMode = kCAFillModeForwards;
-    pathAnimation.removedOnCompletion = NO;
-    [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
-    
-    [CATransaction flush];
-    [CATransaction commit];
-    [CATransaction flush];
-    [CATransaction unlock];
     return YES;
 }
 
-- (CAShapeLayer *)findCircularProgressShapelayer: (NSString *)layerName
+- (CAShapeLayer *)findCircularProgressShapelayer:(NSString *)layerName
 {
     for (CALayer *layer in self.sublayers) {
         if ([layer isKindOfClass:[CAShapeLayer class]] && [layer.name isEqualToString:layerName])

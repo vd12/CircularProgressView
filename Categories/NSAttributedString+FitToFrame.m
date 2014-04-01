@@ -20,7 +20,7 @@ BOOL CGSizeContainsSize(CGSize x, CGSize y)
 
 @implementation NSAttributedString (FitToFrame)
 
-- (NSAttributedString *)fitToFrame:(CGRect)frame newString:(NSString *)newStr newColor:(UIColor*)color prevFontSize:(CGFloat*)prevFontSize returnNewBounds:(CGRect*)bounds
+- (NSAttributedString *)fitToFrame:(CGRect)frame newString:(NSString *)newStr newColor:(UIColor *)color prevFontSize:(CGFloat *)prevFontSize returnNewBounds:(CGRect *)bounds
 {
     NSMutableAttributedString *outStr = [self mutableCopy];
     [self enumerateAttribute:(NSString *)kCTFontAttributeName inRange:NSMakeRange(0, self.string.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {

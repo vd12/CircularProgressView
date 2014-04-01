@@ -14,8 +14,7 @@ static int const kMaxNumber = 11;
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self)
+    if ((self = [super initWithFrame:frame]))
         [self setup];
     return self;
 }
