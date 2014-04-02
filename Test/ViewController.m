@@ -54,7 +54,6 @@
 
 - (IBAction)pressButton:(UIButton*)sender
 {
-    self.volumeView.value = .3;
     if (![sender.layer findCircularProgress]) {
         NSDictionary *dict = @{kCircularProgressBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.],
                                  kCircularProgressBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
@@ -89,5 +88,6 @@
         [self.buttonPress.layer getCircularProgressMax:&max andCurrent:&current];
         NSLog(@"%s %d New:%tu", __func__, ret, current);
     }
+    self.volumeView.value = (arc4random() % 100) / 100.;
 }
 @end

@@ -25,7 +25,6 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 
 - (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary *)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    [self removeCircularProgress]; // dont add it twice!!!                                                                                                                     
     if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
     UIColor *bgroundColor = dict[kCircularProgressBgroundColorKey];
@@ -50,7 +49,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     int space = MIN(CGRectGetWidth(frame), CGRectGetHeight(frame)) - inset * 2;
     if (space < 20)  //sanity check
         return NO;
-    [self removeCircularProgress];
+    [self removeCircularProgress]; // dont add it twice!!!
 
     CAShapeLayer *shapeLayer;
     if (corners) {
@@ -159,13 +158,11 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 - (void)removeCircularProgressAnimations
 {
     [self removeAllAnimations];
+    [CATransaction begin];
     for (CALayer* layer in [self sublayers]) {
-        [CATransaction begin];
         [layer removeAllAnimations];
-        [CATransaction flush];
-        [CATransaction commit];
-        [CATransaction flush];
     }
+    [CATransaction commit];
 }
 
 - (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer newPosition:(NSUInteger)newCurrent newColors:(NSDictionary *)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
@@ -203,24 +200,17 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     }
     CGRect newBounds;
     if (0. == duration) {
+        [ self removeCircularProgressAnimations];
         txtLayer.string = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
         txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
         txtLayer.bounds = newBounds;
         sliderLayer.strokeEnd = ((CGFloat)newCurrent) / max;
-        if (completionBlock) {
-            [ self removeCircularProgressAnimations];
+        if (completionBlock)
             dispatch_async(dispatch_get_main_queue(),completionBlock);//completionBlock();
-        }
         return YES;
     } else {
         [CATransaction lock];
         [CATransaction begin];
-        [CATransaction setCompletionBlock:^{
-            if (completionBlock) {
-                [ self removeCircularProgressAnimations];
-                completionBlock();
-            }
-        }];
         [ self removeCircularProgressAnimations];
         
         //txt & txt bounds
@@ -277,10 +267,15 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         pathAnimation.fillMode = kCAFillModeForwards;
         pathAnimation.removedOnCompletion = NO;
         [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
+
+        [CATransaction setCompletionBlock:^{
+            if (completionBlock) {
+                [ self removeCircularProgressAnimations];
+                completionBlock();
+            }
+        }];
         
-        [CATransaction flush];
         [CATransaction commit];
-        [CATransaction flush];
         [CATransaction unlock];
     }
     return YES;
