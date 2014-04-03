@@ -51,17 +51,16 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         return NO;
     [self removeCircularProgress]; // dont add it twice!!!
 
-    CAShapeLayer *shapeLayer;
     if (corners) {
-        shapeLayer = [CAShapeLayer layer];
-        shapeLayer.zPosition = CGFLOAT_MAX;
-        shapeLayer.frame = frame;
-        shapeLayer.backgroundColor = bgroundColor.CGColor;
-        shapeLayer.name = kCircularProgressBgroundShapeLayerName;
-        [self addSublayer:shapeLayer];
+        CAShapeLayer *bshapeLayer = [CAShapeLayer layer];
+        bshapeLayer.zPosition = CGFLOAT_MAX;
+        bshapeLayer.frame = frame;
+        bshapeLayer.backgroundColor = bgroundColor.CGColor;
+        bshapeLayer.name = kCircularProgressBgroundShapeLayerName;
+        [self addSublayer:bshapeLayer];
     }
     
-    shapeLayer = [CAShapeLayer layer];
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     shapeLayer.zPosition = CGFLOAT_MAX;
     shapeLayer.frame = frame;
     CGFloat sqSize = MIN(CGRectGetWidth(shapeLayer.bounds), CGRectGetHeight(shapeLayer.bounds));
@@ -131,9 +130,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 
 - (void)removeCircularProgress
 {
-    [ self removeCircularProgressAnimations];
-    [[self findCircularProgressShapelayer:kCircularProgressShapeLayerName] removeFromSuperlayer];
-    [[self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName] removeFromSuperlayer];
+    [ self removeCircularProgressAnimationsWithLayers:YES];
 }
 
 - (BOOL)setCircularProgressCurrentPosition:(NSUInteger)newCurrent newColorsAndWidth:(NSDictionary *)dict animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
@@ -155,14 +152,19 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 
 #pragma mark private instance methods
 
-- (void)removeCircularProgressAnimations
+- (void)removeCircularProgressAnimationsWithLayers:(BOOL)removeLayers
 {
-    [self removeAllAnimations];
+    CALayer* layer = [self findCircularProgressShapelayer:kCircularProgressShapeLayerName];
     [CATransaction begin];
-    for (CALayer* layer in [self sublayers]) {
-        [layer removeAllAnimations];
+    for (CALayer* sublayer in [layer sublayers]) {
+        [sublayer removeAllAnimations];
     }
     [CATransaction commit];
+    [CATransaction flush];
+    if (removeLayers) {
+        [layer removeFromSuperlayer];
+        [[self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName] removeFromSuperlayer];
+    }
 }
 
 - (BOOL)animateCircularProgress:(CAShapeLayer *)shapeLayer newPosition:(NSUInteger)newCurrent newColors:(NSDictionary *)colors animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat completion:(CircularProgressAnimatingCompletionBlock)completionBlock
@@ -199,20 +201,19 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
             txtLayer.foregroundColor = txtColor.CGColor;
     }
     CGRect newBounds;
-    if (0. == duration) {
-        [ self removeCircularProgressAnimations];
-        txtLayer.string = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-        txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
-        txtLayer.bounds = newBounds;
-        sliderLayer.strokeEnd = ((CGFloat)newCurrent) / max;
+    if (newCurrent == current || 0. == duration) { // no animation!!!
+        if (0. == duration && newCurrent != current) {
+            txtLayer.string = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+            txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
+            txtLayer.bounds = newBounds;
+            sliderLayer.strokeEnd = ((CGFloat)newCurrent) / max;
+        }
         if (completionBlock)
             dispatch_async(dispatch_get_main_queue(),completionBlock);//completionBlock();
-        return YES;
-    } else {
+    } else { //animation
+        //[ self removeCircularProgressAnimationsWithLayers:NO];
         [CATransaction lock];
         [CATransaction begin];
-        [ self removeCircularProgressAnimations];
-        
         //txt & txt bounds
         BOOL inc = (newCurrent >= current) ? YES : NO;
         NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
@@ -243,6 +244,16 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
         valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
         
+        //must be before adding animations!!!
+        [CATransaction setCompletionBlock:^{
+            //txtLayer.string = valuesStr[i];
+            if (completionBlock) {
+                //[ self removeCircularProgressAnimationsWithLayers:NO];
+                completionBlock();
+            }
+        }];
+
+        //txt
         CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
         txtAnimation.values = valuesStr;
         txtAnimation.duration = duration;
@@ -268,14 +279,9 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         pathAnimation.removedOnCompletion = NO;
         [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
 
-        [CATransaction setCompletionBlock:^{
-            if (completionBlock) {
-                [ self removeCircularProgressAnimations];
-                completionBlock();
-            }
-        }];
-        
+    //        [CATransaction flush];
         [CATransaction commit];
+    //        [CATransaction flush];
         [CATransaction unlock];
     }
     return YES;

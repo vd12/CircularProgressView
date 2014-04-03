@@ -52,7 +52,7 @@
     [self.audioPlayer play];
 }
 
-- (IBAction)pressButton:(UIButton*)sender
+- (IBAction)pressButton:(UIButton *)sender
 {
     if (![sender.layer findCircularProgress]) {
         NSDictionary *dict = @{kCircularProgressBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.],

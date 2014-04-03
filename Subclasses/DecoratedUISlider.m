@@ -23,7 +23,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder*)coder //up from storyboard
+- (id)initWithCoder:(NSCoder *)coder //up from storyboard
 {
     if ((self = [super initWithCoder:coder]))
         [self setup];
