@@ -40,9 +40,12 @@
     
     ret = [self.rightView.layer addCircularProgressWithMax:59 currentPosition:59 newPosition:0 animationDuration:60. repeat:YES frame:self.rightView.bounds corners:NO colorsAndWidth:dict completion:nil];
     NSLog(@"%s %d,", __func__, ret);
+    self.volumeView.value = .7;
     self.volumeView.minimumValue = .25;
     self.volumeView.maximumValue = .75;
-    self.volumeView.value = .7;
+    self.volumeView1.value = .7;
+    self.volumeView1.minimumValue = .25;
+    self.volumeView1.maximumValue = .75;
     self.slider.value = 1.;
     
     NSError *error = nil;

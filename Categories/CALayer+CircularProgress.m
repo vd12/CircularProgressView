@@ -25,8 +25,14 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 
 - (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary *)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock
 {
-    if (current > max || newPosition > max || CGRectIsEmpty(frame)) //sanity check
+    if (current > max || newPosition > max || CGRectIsEmpty(frame) || !max) //sanity check
         return NO;
+    if (current == newPosition && max > 1) { //initial animation :-)
+        if (!current)
+            current++;
+        else
+            current--;
+    }
     UIColor *bgroundColor = dict[kCircularProgressBgroundColorKey];
     if (!bgroundColor)
         bgroundColor = [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.];
@@ -114,7 +120,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     [shapeLayer addSublayer:sliderLayer];
     
     [shapeLayer addSublayer:txtLayer];
-    
+
     [self addSublayer:shapeLayer];
     
     return [self animateCircularProgress:shapeLayer newPosition:newPosition newColors:nil animationDuration:duration repeat:repeat completion:completionBlock];
@@ -155,15 +161,15 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 - (void)removeCircularProgressAnimationsWithLayers:(BOOL)removeLayers
 {
     CALayer* layer = [self findCircularProgressShapelayer:kCircularProgressShapeLayerName];
-    [CATransaction begin];
-    for (CALayer* sublayer in [layer sublayers]) {
-        [sublayer removeAllAnimations];
-    }
-    [CATransaction commit];
-    [CATransaction flush];
     if (removeLayers) {
         [layer removeFromSuperlayer];
         [[self findCircularProgressShapelayer:kCircularProgressBgroundShapeLayerName] removeFromSuperlayer];
+    } else {
+        [CATransaction begin];
+        for (CALayer* sublayer in [layer sublayers]) {
+            [sublayer removeAllAnimations];
+        }
+        [CATransaction commit];
     }
 }
 
@@ -181,6 +187,9 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     if (current > max || newCurrent > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
 
+    //[ self removeCircularProgressAnimationsWithLayers:NO];
+    [CATransaction lock];
+    [CATransaction begin];
     CAShapeLayer *sliderLayer = (CAShapeLayer *)shapeLayer.sublayers[0];
     UIColor *bgroundColor = colors[kCircularProgressBgroundColorKey];
     if (bgroundColor) {
@@ -200,90 +209,77 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         if (!CGColorEqualToColor(txtLayer.foregroundColor, txtColor.CGColor))
             txtLayer.foregroundColor = txtColor.CGColor;
     }
-    CGRect newBounds;
-    if (newCurrent == current || 0. == duration) { // no animation!!!
-        if (0. == duration && newCurrent != current) {
-            txtLayer.string = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-            txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
-            txtLayer.bounds = newBounds;
-            sliderLayer.strokeEnd = ((CGFloat)newCurrent) / max;
-        }
-        if (completionBlock)
-            dispatch_async(dispatch_get_main_queue(),completionBlock);//completionBlock();
-    } else { //animation
-        //[ self removeCircularProgressAnimationsWithLayers:NO];
-        [CATransaction lock];
-        [CATransaction begin];
-        //txt & txt bounds
-        BOOL inc = (newCurrent >= current) ? YES : NO;
-        NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
-        NSUInteger step = 1;
-        CGFloat curFps30 = steps / duration / 30.;
-        if (curFps30 > 1.) {// > 30FPS?
-            step *= curFps30;
-            steps /= step;
-        }
-        if (steps > kCircularProgressKeyFrameLimit) {
-            step *= steps / kCircularProgressKeyFrameLimit;
-            steps = kCircularProgressKeyFrameLimit;
-        }
-        NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
-        NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
-        NSUInteger i = 0, cur = current;
-        valuesStr[i] =  [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-        txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
-        valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-        while (++i < steps) {
-            valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-            valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-            if (inc)
-                cur += step;
-            else
-                cur -= step;
-        }
-        valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-        valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-        
-        //must be before adding animations!!!
-        [CATransaction setCompletionBlock:^{
-            //txtLayer.string = valuesStr[i];
-            if (completionBlock) {
-                //[ self removeCircularProgressAnimationsWithLayers:NO];
-                completionBlock();
-            }
-        }];
-
-        //txt
-        CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
-        txtAnimation.values = valuesStr;
-        txtAnimation.duration = duration;
-        txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-        txtAnimation.fillMode = kCAFillModeForwards;
-        txtAnimation.removedOnCompletion = NO;
-        [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
-        //txt bounds
-        CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
-        boundsAnimation.values = valuesBounds;
-        boundsAnimation.duration = duration;
-        boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-        boundsAnimation.fillMode = kCAFillModeForwards;
-        boundsAnimation.removedOnCompletion = NO;
-        [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
-        //slider
-        CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        pathAnimation.duration = duration;
-        pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-        pathAnimation.fromValue = @(((CGFloat)current) / max);
-        pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
-        pathAnimation.fillMode = kCAFillModeForwards;
-        pathAnimation.removedOnCompletion = NO;
-        [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
-
-    //        [CATransaction flush];
-        [CATransaction commit];
-    //        [CATransaction flush];
-        [CATransaction unlock];
+    //txt & txt bounds
+    BOOL inc = (newCurrent >= current) ? YES : NO;
+    NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
+    NSUInteger step = 1;
+    CGFloat curFps30 = steps / duration / 30.;
+    if (curFps30 > 1.) {// > 30FPS?
+        step *= curFps30;
+        steps /= step;
+        if (steps < 1)
+            steps = 1;
     }
+    if (steps > kCircularProgressKeyFrameLimit) {
+        step *= steps / kCircularProgressKeyFrameLimit;
+        steps = kCircularProgressKeyFrameLimit;
+    }
+    NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
+    NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
+    NSUInteger i = 0, cur = current;
+    CGRect newBounds;
+    valuesStr[i] =  [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
+    valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+    while (++i < steps) {
+        valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+        valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+        if (inc)
+            cur += step;
+        else
+            cur -= step;
+    }
+    valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(newCurrent) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
+    valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
+    
+    //must be before adding animations!!!
+    [CATransaction setCompletionBlock:^{
+        if (completionBlock) {
+            //[self removeCircularProgressAnimationsWithLayers:NO];
+            completionBlock();
+        }
+    }];
+
+    //txt
+    CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
+    txtAnimation.values = valuesStr;
+    txtAnimation.duration = duration;
+    txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    txtAnimation.fillMode = kCAFillModeBoth;
+    txtAnimation.removedOnCompletion = NO;
+    [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
+    //txt bounds
+    CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
+    boundsAnimation.values = valuesBounds;
+    boundsAnimation.duration = duration;
+    boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    boundsAnimation.fillMode = kCAFillModeBoth;
+    boundsAnimation.removedOnCompletion = NO;
+    [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
+    //slider
+    CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    pathAnimation.duration = duration;
+    pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    pathAnimation.fromValue = @(((CGFloat)current) / max);
+    pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
+    pathAnimation.fillMode = kCAFillModeBoth;
+    pathAnimation.removedOnCompletion = NO;
+    [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
+
+//        [CATransaction flush];
+    [CATransaction commit];
+//        [CATransaction flush];
+    [CATransaction unlock];
     return YES;
 }
 
