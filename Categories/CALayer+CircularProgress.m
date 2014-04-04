@@ -27,12 +27,6 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 {
     if (current > max || newPosition > max || CGRectIsEmpty(frame) || !max) //sanity check
         return NO;
-    if (current == newPosition && max > 1) { //initial animation :-)
-        if (!current)
-            current++;
-        else
-            current--;
-    }
     UIColor *bgroundColor = dict[kCircularProgressBgroundColorKey];
     if (!bgroundColor)
         bgroundColor = [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.];
