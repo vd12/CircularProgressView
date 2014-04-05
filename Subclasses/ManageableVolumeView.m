@@ -104,21 +104,23 @@
         self.backingSlider.value = self.backingSlider.maximumValue;
     else if (self.backingSlider.value < self.backingSlider.minimumValue)
         self.backingSlider.value = self.backingSlider.minimumValue;
-    ManageableVolumeView * __weak weakSelf = self;
+    ManageableVolumeView * __weak wSelf = self;
     CircularProgressAnimatingCompletionBlock completion = ^{
         //NSLog(@"Completion");
-        ManageableVolumeView *strongSelf = weakSelf;
-        if (0 == strongSelf.pop.alpha) {
-            strongSelf.pop.alpha = 1;
-            UIGraphicsBeginImageContext(strongSelf.pop.layer.bounds.size);
-            [strongSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
-            UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            strongSelf.pop.alpha = 0;
-            [strongSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
-        } else {
-            if ([strongSelf.backingSlider thumbImageForState:UIControlStateNormal])
-                [strongSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];
+        ManageableVolumeView *sSelf = wSelf;
+        if (sSelf) {
+            if (0 == sSelf.pop.alpha) {
+                sSelf.pop.alpha = 1;
+                UIGraphicsBeginImageContext(sSelf.pop.layer.bounds.size);
+                [sSelf.pop.layer renderInContext:UIGraphicsGetCurrentContext()];
+                UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                sSelf.pop.alpha = 0;
+                [sSelf.backingSlider setThumbImage:img forState:UIControlStateNormal];
+            } else {
+                if ([sSelf.backingSlider thumbImageForState:UIControlStateNormal])
+                    [sSelf.backingSlider setThumbImage:nil forState:UIControlStateNormal];
+            }
         }
     };
     [self.pop set:self.backingSlider.value completion:completion newColorsAndWidth:nil];

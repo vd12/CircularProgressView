@@ -66,10 +66,10 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     CGFloat sqSize = MIN(CGRectGetWidth(shapeLayer.bounds), CGRectGetHeight(shapeLayer.bounds));
     CGRect bounds = CGRectMake((CGRectGetWidth(shapeLayer.bounds) - sqSize) / 2., (CGRectGetHeight(shapeLayer.bounds) - sqSize) / 2., sqSize, sqSize);
     shapeLayer.bounds = CGRectInset(bounds, inset, inset);
-    CGPoint center = CGPointMake( shapeLayer.bounds.origin.x + CGRectGetWidth(shapeLayer.bounds) / 2., shapeLayer.bounds.origin.y + CGRectGetHeight(shapeLayer.bounds) / 2.);
+    CGPoint center = CGPointMake(shapeLayer.bounds.origin.x + CGRectGetWidth(shapeLayer.bounds) / 2., shapeLayer.bounds.origin.y + CGRectGetHeight(shapeLayer.bounds) / 2.);
     inset = [bgroundCircleWidth floatValue] / 4;
     bounds = CGRectInset(shapeLayer.bounds, inset, inset);
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter: center radius:bounds.size.height / 2. startAngle:-M_PI_2 endAngle:M_PI+M_PI_2 clockwise:YES];
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:bounds.size.height / 2. startAngle:-M_PI_2 endAngle:M_PI+M_PI_2 clockwise:YES];
     shapeLayer.path = path.CGPath;
     shapeLayer.strokeColor = bgroundCircleColor.CGColor;
     shapeLayer.fillColor = bgroundColor.CGColor;
@@ -91,7 +91,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     //additional 1 transparent to get bounds fitted in round!!
     CATextLayer *txtLayer = [CATextLayer layer];
     txtLayer.zPosition = CGFLOAT_MAX;
-    CGFloat sqSize1 = (( sqSize - [animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue] ) / 2.) * M_SQRT2;
+    CGFloat sqSize1 = ((sqSize - [animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue]) / 2.) * M_SQRT2;
     inset = (sqSize - sqSize1) / 2;
     txtLayer.frame = CGRectInset(shapeLayer.bounds, inset, inset);
     txtLayer.backgroundColor = bgroundColor.CGColor; //animatingCircleColor.CGColor;
@@ -105,8 +105,8 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
     
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
-                                                attributes:@{ (NSString *)kCTFontAttributeName: (__bridge id)fontRef,
-                                                              (NSString *)kCTForegroundColorAttributeName: (__bridge id)textColor.CGColor}];
+                                                attributes:@{ (NSString *)kCTFontAttributeName:(__bridge id)fontRef,
+                                                              (NSString *)kCTForegroundColorAttributeName:(__bridge id)textColor.CGColor}];
     CFRelease(fontRef);
     
     txtLayer.string = attrStr;
@@ -205,27 +205,32 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     }
     //txt & txt bounds
     BOOL inc = (newCurrent >= current) ? YES : NO;
-    NSUInteger steps = inc ? newCurrent - current : current - newCurrent;
-    NSUInteger step = 1;
-    CGFloat curFps30 = steps / duration / 30.;
-    if (curFps30 > 1.) {// > 30FPS?
-        step *= curFps30;
-        steps /= step;
-        if (steps < 1)
-            steps = 1;
+    NSInteger steps = 1, step;
+    if (current == newCurrent)
+        duration = 0;
+    if (duration > 0) {
+        steps = inc ? newCurrent - current : current - newCurrent;
+        step = 1;
+        Float32 fps = steps / duration;
+        if (fps > 30) {// > 30FPS?
+            step = fps / 30;
+            steps /= step;
+            if (steps < 1)
+                steps = 1;
+        }
+        if (steps > kCircularProgressKeyFrameLimit) {
+            step *= steps / kCircularProgressKeyFrameLimit;
+            steps = kCircularProgressKeyFrameLimit;
+        }
     }
-    if (steps > kCircularProgressKeyFrameLimit) {
-        step *= steps / kCircularProgressKeyFrameLimit;
-        steps = kCircularProgressKeyFrameLimit;
-    }
-    NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 2];
-    NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 2];
+    NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 1];
+    NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 1];
     NSUInteger i = 0, cur = current;
     CGRect newBounds;
     valuesStr[i] =  [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
     txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
     valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
-    while (++i < steps) {
+    while (++i < steps) { //skip if steps <= 1
         valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
         valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
         if (inc)
@@ -249,7 +254,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     txtAnimation.values = valuesStr;
     txtAnimation.duration = duration;
     txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    txtAnimation.fillMode = kCAFillModeBoth;
+    txtAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
     txtAnimation.removedOnCompletion = NO;
     [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
     //txt bounds
@@ -257,7 +262,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     boundsAnimation.values = valuesBounds;
     boundsAnimation.duration = duration;
     boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    boundsAnimation.fillMode = kCAFillModeBoth;
+    boundsAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
     boundsAnimation.removedOnCompletion = NO;
     [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
     //slider
@@ -266,7 +271,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     pathAnimation.repeatCount = repeat ? HUGE_VALF : 0;
     pathAnimation.fromValue = @(((CGFloat)current) / max);
     pathAnimation.toValue = @(((CGFloat)newCurrent) / max);
-    pathAnimation.fillMode = kCAFillModeBoth;
+    pathAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
     [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
 
