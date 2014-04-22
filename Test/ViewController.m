@@ -21,12 +21,12 @@
 @property (weak, nonatomic) IBOutlet ManageableVolumeView *volumeView;
 @property (weak, nonatomic) IBOutlet ManageableVolumeView *volumeView1;
 @property (weak, nonatomic) IBOutlet DecoratedUISlider *slider;
-@property (nonatomic) AVAudioPlayer *audioPlayer;
+@property (nonatomic) AVAudioPlayer *player;
 @end
 
 @implementation ViewController
 
--(void)viewDidLoad
+- (BOOL) initCircProgr
 {
     NSDictionary *dict = @{kCircularProgressBgroundColorKey: [UIColor colorWithRed:0. green:172./255. blue:237./255. alpha:1.],
                            kCircularProgressBgroundCircleColorKey: [UIColor colorWithRed:0. green:0. blue:0. alpha:1.],
@@ -47,12 +47,31 @@
     self.volumeView1.minimumValue = .25;
     self.volumeView1.maximumValue = .75;
     self.slider.value = 1.;
-    
     NSError *error = nil;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"silencio" ofType:@"mp3"]] error:&error];
-    [self.audioPlayer prepareToPlay];
-    self.audioPlayer.numberOfLoops = -1;
-    [self.audioPlayer play];
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"silencio" ofType:@"mp3"]] error:&error];
+    [self.player prepareToPlay];
+    self.player.numberOfLoops = -1;
+    [self.player play];
+
+    return ret;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self initCircProgr];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    [self initCircProgr];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    [self initCircProgr];
 }
 
 - (IBAction)pressButton:(UIButton *)sender

@@ -18,8 +18,9 @@ static NSString *kCircularProgressShapeLayerName = @"CircularProgress";
 static NSString *kCircularProgressBgroundShapeLayerName = @"CircularProgressBground";
 static NSUInteger const kCircularProgressKeyFrameLimit = 1000;
 static int const kCircularProgressSavedParams = 7;
-static NSString *kCircularProgressSaveParamsFormat = @"%tu,%tu;%f,%f,%f,%f;%f";
-static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%lf;%lf";
+static NSString *kCircularProgressSaveParamsFormat = @"%u %u %f %f %f %f %f";
+// %lf for double scanf!!! and then assighn to cgfloat ccording apple doc
+static char const *kCircularProgressScanfParamsFormat = "%u %u %lf %lf %lf %lf %lf";
 
 #pragma mark public instance methods
 
@@ -53,7 +54,6 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
 
     if (corners) {
         CAShapeLayer *bshapeLayer = [CAShapeLayer layer];
-        bshapeLayer.zPosition = CGFLOAT_MAX;
         bshapeLayer.frame = frame;
         bshapeLayer.backgroundColor = bgroundColor.CGColor;
         bshapeLayer.name = kCircularProgressBgroundShapeLayerName;
@@ -61,7 +61,6 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     }
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.zPosition = CGFLOAT_MAX;
     shapeLayer.frame = frame;
     CGFloat sqSize = MIN(CGRectGetWidth(shapeLayer.bounds), CGRectGetHeight(shapeLayer.bounds));
     CGRect bounds = CGRectMake((CGRectGetWidth(shapeLayer.bounds) - sqSize) / 2., (CGRectGetHeight(shapeLayer.bounds) - sqSize) / 2., sqSize, sqSize);
@@ -74,46 +73,46 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     shapeLayer.strokeColor = bgroundCircleColor.CGColor;
     shapeLayer.fillColor = bgroundColor.CGColor;
     shapeLayer.lineWidth = [bgroundCircleWidth floatValue];
-    shapeLayer.strokeStart = 0.;
-    shapeLayer.strokeEnd = 1.;
+    shapeLayer.strokeStart = 0;
+    shapeLayer.strokeEnd = 1;
     shapeLayer.name = kCircularProgressShapeLayerName;
 
     CAShapeLayer *sliderLayer = [CAShapeLayer layer];
-    sliderLayer.zPosition = CGFLOAT_MAX;
     sliderLayer.frame = frame;
     sliderLayer.bounds = shapeLayer.bounds;
     sliderLayer.path = path.CGPath;
     sliderLayer.strokeColor = animatingCircleColor.CGColor;
     sliderLayer.fillColor = bgroundColor.CGColor;
     sliderLayer.lineWidth = [animatingCircleWidth floatValue];
-    sliderLayer.strokeStart = sliderLayer.strokeEnd = 0.;
+    sliderLayer.strokeStart = sliderLayer.strokeEnd = 0;
 
     //additional 1 transparent to get bounds fitted in round!!
     CATextLayer *txtLayer = [CATextLayer layer];
-    txtLayer.zPosition = CGFLOAT_MAX;
     CGFloat sqSize1 = ((sqSize - [animatingCircleWidth floatValue] - [bgroundCircleWidth floatValue]) / 2.) * M_SQRT2;
     inset = (sqSize - sqSize1) / 2;
     txtLayer.frame = CGRectInset(shapeLayer.bounds, inset, inset);
     txtLayer.backgroundColor = bgroundColor.CGColor; //animatingCircleColor.CGColor;
-    txtLayer.foregroundColor = textColor.CGColor;
-    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, current,
-                     txtLayer.frame.origin.x, txtLayer.frame.origin.y, txtLayer.frame.size.width, txtLayer.frame.size.height, 0.]; //[@(current) stringValue];
+    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, (unsigned int)max, (unsigned int)current,
+                     (double)txtLayer.frame.origin.x, (double)txtLayer.frame.origin.y, (double)txtLayer.frame.size.width, (double)txtLayer.frame.size.height, 0.]; //[@(current) stringValue];
     txtLayer.alignmentMode = kCAAlignmentCenter;
     txtLayer.contentsGravity = kCAGravityBottom;
 
     //need to caclulate frame for goal-1 first because it is widest themn we roll to current
+    
+    //CTFontRef fontRef = (__bridge CTFontRef)[UIFont preferredFontForTextStyle:UIFontTextStyleBody];//CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
     CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
     
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName:(__bridge id)fontRef,
                                                               (NSString *)kCTForegroundColorAttributeName:(__bridge id)textColor.CGColor}];
-    CFRelease(fontRef);
     
     txtLayer.string = attrStr;
 
     [shapeLayer addSublayer:sliderLayer];
     
     [shapeLayer addSublayer:txtLayer];
+
+    CFRelease(fontRef);
 
     [self addSublayer:shapeLayer];
     
@@ -144,8 +143,11 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     if (!txtLayer)
         return nil;
-    if (sscanf([txtLayer.name cStringUsingEncoding:NSUTF8StringEncoding], "%tu,%tu", max, current) != 2 )
+    unsigned int mx, curr;
+    if (sscanf([txtLayer.name cStringUsingEncoding:NSASCIIStringEncoding], "%u %u", &mx, &curr) != 2 )
         return nil;
+    *max = mx;
+    *current = curr;
 //    NSLog(@"%s %tu,%tu", __func__, *max, *current);
     return shapeLayer;
 }
@@ -174,13 +176,16 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     CATextLayer *txtLayer = (CATextLayer *)shapeLayer.sublayers[1];
     NSUInteger max, current;
     double x, y, width, height, fSize;
-    if (sscanf([txtLayer.name cStringUsingEncoding:NSUTF8StringEncoding], kCircularProgressSscanfParamsFormat, &max, &current, &x, &y, &width, &height, &fSize) != kCircularProgressSavedParams )
+    unsigned int mx, curr;
+    if (sscanf([txtLayer.name cStringUsingEncoding:NSASCIIStringEncoding], kCircularProgressScanfParamsFormat, &mx, &curr, &x, &y, &width, &height, &fSize) != kCircularProgressSavedParams )
         return NO;
+    max = (NSUInteger)mx;
+    current = (NSUInteger)curr;
     CGRect frame = CGRectMake(x, y, width, height);
     CGFloat fontSize = fSize;
+    
     if (current > max || newCurrent > max || CGRectIsEmpty(frame)) //sanity check
         return NO;
-
     //[ self removeCircularProgressAnimationsWithLayers:NO];
     [CATransaction lock];
     [CATransaction begin];
@@ -211,7 +216,7 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     if (duration > 0) {
         steps = inc ? newCurrent - current : current - newCurrent;
         step = 1;
-        Float32 fps = steps / duration;
+        double fps = steps / duration;
         if (fps > 30) {// > 30FPS?
             step = fps / 30;
             steps /= step;
@@ -222,13 +227,15 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
             step *= steps / kCircularProgressKeyFrameLimit;
             steps = kCircularProgressKeyFrameLimit;
         }
-    }
+    } else
+        [CATransaction setDisableActions:YES];//disable animation
+
     NSMutableArray *valuesStr = [NSMutableArray arrayWithCapacity:steps + 1];
     NSMutableArray *valuesBounds = [NSMutableArray arrayWithCapacity:steps + 1];
     NSUInteger i = 0, cur = current;
     CGRect newBounds;
     valuesStr[i] =  [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
-    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, max, newCurrent, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, fontSize];
+    txtLayer.name = [NSString stringWithFormat:kCircularProgressSaveParamsFormat, (unsigned int)max, (unsigned int)newCurrent, (double)(frame.origin.x), (double)(frame.origin.y), (double)(frame.size.width), (double)(frame.size.height), (double)fontSize];
     valuesBounds[i] = [NSValue valueWithCGRect:newBounds];
     while (++i < steps) { //skip if steps <= 1
         valuesStr[i] = [txtLayer.string fitToFrame:frame newString:[@(cur) stringValue] newColor:txtColor prevFontSize:&fontSize returnNewBounds:&newBounds];
@@ -249,22 +256,6 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
         }
     }];
 
-    //txt
-    CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
-    txtAnimation.values = valuesStr;
-    txtAnimation.duration = duration;
-    txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    txtAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
-    txtAnimation.removedOnCompletion = NO;
-    [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
-    //txt bounds
-    CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
-    boundsAnimation.values = valuesBounds;
-    boundsAnimation.duration = duration;
-    boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
-    boundsAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
-    boundsAnimation.removedOnCompletion = NO;
-    [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
     //slider
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     pathAnimation.duration = duration;
@@ -274,10 +265,24 @@ static char const *kCircularProgressSscanfParamsFormat = "%tu,%tu;%lf,%lf,%lf,%l
     pathAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
     [sliderLayer addAnimation:pathAnimation forKey:pathAnimation.keyPath];
+    //txt bounds
+    CAKeyframeAnimation *boundsAnimation = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
+    boundsAnimation.values = valuesBounds;
+    boundsAnimation.duration = duration;
+    boundsAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    boundsAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
+    boundsAnimation.removedOnCompletion = NO;
+    [txtLayer addAnimation:boundsAnimation forKey:boundsAnimation.keyPath];
+    //txt
+    CAKeyframeAnimation *txtAnimation = [CAKeyframeAnimation animationWithKeyPath:@"string"];
+    txtAnimation.values = valuesStr;
+    txtAnimation.duration = duration;
+    txtAnimation.repeatCount = repeat ? HUGE_VALF : 0;
+    txtAnimation.fillMode = kCAFillModeBoth;//kCAFillModeForwards;
+    txtAnimation.removedOnCompletion = NO;
+    [txtLayer addAnimation:txtAnimation forKey:txtAnimation.keyPath];
 
-//        [CATransaction flush];
     [CATransaction commit];
-//        [CATransaction flush];
     [CATransaction unlock];
     return YES;
 }

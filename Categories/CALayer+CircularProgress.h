@@ -19,8 +19,7 @@ typedef void (^CircularProgressAnimatingCompletionBlock)(void);
 
 @interface CALayer (CircularProgress)
 
-// current from 0 to (goal - 1)!!!
-// return -1 in case of error otherwise current or goal
+// current from 0 to (max - 1)!!!
 - (BOOL)addCircularProgressWithMax:(NSUInteger)max currentPosition:(NSUInteger)current newPosition:(NSUInteger)newPosition animationDuration:(NSTimeInterval)duration repeat:(BOOL)repeat frame:(CGRect)frame corners:(BOOL)corners colorsAndWidth:(NSDictionary *)dict completion:(CircularProgressAnimatingCompletionBlock)completionBlock;
 - (BOOL)findCircularProgress;
 - (void)removeCircularProgress;
