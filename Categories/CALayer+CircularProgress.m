@@ -97,22 +97,17 @@ static char const *kCircularProgressScanfParamsFormat = "%u %u %lf %lf %lf %lf %
     txtLayer.alignmentMode = kCAAlignmentCenter;
     txtLayer.contentsGravity = kCAGravityBottom;
 
-    //need to caclulate frame for goal-1 first because it is widest themn we roll to current
-    
-    //CTFontRef fontRef = (__bridge CTFontRef)[UIFont preferredFontForTextStyle:UIFontTextStyleBody];//CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
     CTFontRef fontRef = CTFontCreateWithName(CFSTR("HelveticaNeue-Thin"), 20.0, NULL); //"Chalkduster""HelveticaNeue-Light""Baskerville""HelveticaNeue-Thin"
-    
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
+    NSAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:[@(0) stringValue]
                                                 attributes:@{ (NSString *)kCTFontAttributeName:(__bridge id)fontRef,
                                                               (NSString *)kCTForegroundColorAttributeName:(__bridge id)textColor.CGColor}];
+    CFRelease(fontRef);
     
     txtLayer.string = attrStr;
 
     [shapeLayer addSublayer:sliderLayer];
     
     [shapeLayer addSublayer:txtLayer];
-
-    CFRelease(fontRef);
 
     [self addSublayer:shapeLayer];
     
